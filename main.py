@@ -23,8 +23,6 @@ for i in range(1, N, 1):
         elements = list(map(lambda x: int(x.text),
             soup.find_all(name="td", attrs={"valign": "middle", "align": "center"})[8:]))
 
-        print(elements)
-
         # Добавим в общий список данные из этого файла:
         citations += elements
 
@@ -35,12 +33,26 @@ for el in s:
     d[el] = citations.count(el)
 
 # Соответственно получаем списки для построения графика по точкам
-x = d.keys()
-y = d.values()
+#x = d.keys()
+#y = d.values()
+
+
+newl = []
+
+for i in range(len(citations)):
+    newl.append(d[citations[i]])
+
+
+print(citations)
+print(newl)
+
+x = citations
+y = newl
+
 
 # Настраиваем график для удобного отображения
 fig, ax = plt.subplots()
-ax.plot(x, y)
+ax.plot(x, y, '-ok');
 ax.xaxis.set_minor_locator(AutoMinorLocator())
 ax.yaxis.set_minor_locator(AutoMinorLocator())
 ax.tick_params(which='both', width=2)
@@ -53,7 +65,7 @@ plt.xlim([0, max(x)+5])
 plt.ylim([0, max(y)+5])
 plt.xticks(np.arange(0, max(x)+5, 5))
 plt.yticks(np.arange(0, max(y)+5, 5))
-
+plt.style.use('seaborn-whitegrid')
 # Строим график
 plt.show()
 
