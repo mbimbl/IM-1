@@ -1,0 +1,2237 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+BODY, P, TR, TD, INPUT, SELECT, OPTION, TEXTAREA, UL {font-family: Tahoma, Verdana, Arial Cyr, Arial, Helvetica, sans-serif; font-size: 8pt;}
+A {text-decoration: none; color: #00008f}
+H1 {font-family: Tahoma, Verdana, Arial Cyr, Arial, Helvetica, sans-serif; font-size: 9pt;}
+H2 {font-family: Tahoma, Verdana, Arial Cyr, Arial, Helvetica, sans-serif; font-size: 9pt;}
+FORM, H1, H2 {margin: 0}
+A:hover {color: #ff0000; text-decoration: underline}
+.menus A {color: #ffffff}
+.menus A:hover {color: #ffffff; text-decoration: underline}
+.menub A {color: #000000}
+.expandable {cursor:pointer;}
+img.expandable {filter:alpha(opacity=70); opacity: 0.7;}
+.win_expandable {cursor:pointer}
+.expanded {display:}
+.collapsed {display:none}
+.menug A {color: #555555}
+.redref A {color: #ED1C24}
+P.break {page-break-before: always}
+.input {border: #7f9db9 1px solid; background: #f5f5f5; height: 20px}
+.inputw {border: #7f9db9 1px solid; background: #ffffff; height: 20px}
+.inputr {border: #7f9db9 1px solid; background: #f5f5f5}
+.inputrw {border: #7f9db9 1px solid; background: #ffffff}
+.ast A:hover {text-decoration: none; color: #F26C4F}
+.ast A {font-family: Times New Roman, Garamond, Times, Georgia, serif; font-size: 30pt; color: #F26C4F}
+.astb A:hover {text-decoration: none; color: #00008f}
+.astb A {font-family: Times New Roman, Times, serif; font-size: 30pt; color: #00008f}
+.aster {color: #F26C4F; font-family: Times New Roman, Times, serif; font-size: 16pt; cursor:pointer;}
+.tooltip {
+	background-color:#000;
+	border:1px solid #fff;
+	padding:10px 15px;
+	width:250px;
+	display:none;
+	color:#fff;
+	text-align:left;
+	font-size:8pt;
+	/* outline radius for mozilla/firefox only */
+	-moz-box-shadow:0 0 10px #000;
+	-webkit-box-shadow:0 0 10px #000;
+}
+.tooltip A:hover {color: #ffffff; text-decoration: underline}
+.tooltip A {color: #ffffff; text-decoration: underline}
+.redtext {color: #F26C4F;}
+.bluetext {color: #00008f;}
+</style>
+<meta property="og:image" content="https://elibrary.ru/images/elibrary_fb.png">
+
+<title>eLIBRARY.RU - Результаты поискового запроса</title>
+
+<script type="text/javascript" async="" src="1_files/ga.js"></script><script type="text/javascript" src="1_files/jquery.min.js"></script>
+<script type="text/javascript" src="1_files/MathJax.js"></script>
+<script language="JavaScript">
+//window.onerror=null;
+w_down=new Image();
+w_down.src="/pic/w_show.gif";
+w_up=new Image();
+w_up.src="/pic/w_hide.gif";
+
+function hideShow(elem,parent) {
+  var child =  document.getElementById(elem);
+  child.className = child.className == "collapsed" ? "expanded" : "collapsed";
+  if (parent.className == "win_expandable") parent.src = child.className == "collapsed" ? w_down.src : w_up.src;
+}
+function RowSelect(row,sel){
+  row.bgColor = sel==1 ? "#dddddd" : "#f5f5f5";
+}
+function show_help(topic){
+  var frm = document.forms["results"];
+  anewwin=window.open("", "addwin", "resizable=yes,scrollbars=yes,height=300,width=500,top=0,left=0");
+  frm.action=topic;
+  frm.target="addwin";
+  frm.submit()
+}
+function select_all(){
+  var frm = document.forms["results"];
+  for (var i = 0; i < frm.elements.length; i++) {
+    if (frm.elements[i].name.substring(0,3)=="tid"){
+       frm.elements[i].checked=1;
+       document.all.restab.rows["a" + frm.elements[i].name.substring(3, frm.elements[i].name.length)].bgColor = "#dddddd";}
+  }
+}
+function deselect_all(){
+  var frm = document.forms["results"];
+  for (var i = 0; i < frm.elements.length; i++) {
+    if (frm.elements[i].name.substring(0,3)=="tid"){
+       frm.elements[i].checked=0;
+       document.all.restab.rows["a" + frm.elements[i].name.substring(3, frm.elements[i].name.length)].bgColor = "#f5f5f5";}
+  }
+}
+function itembox_add(){
+  var frm = document.forms["results"];
+  var issel=0;
+  for (var i = 0; i < frm.elements.length; i++) {
+    if (frm.elements[i].name.substring(0,3)=="tid"){
+       if (frm.elements[i].checked) {issel=1; break}
+    }
+  }
+  if (issel==0) {
+    alert ("Не выделено ни одной статьи")}
+  else {
+    anewwin=window.open("", "dialog", "resizable=no,scrollbars=no,height=200,width=400,top=200,left=200");
+    anewwin.resizeTo(400,200);
+    frm.add_all.value=0;
+    frm.action="itembox_item_add.asp";
+    frm.target="dialog";
+    frm.submit()
+  }
+}
+function itembox_add_all(){
+  var frm = document.forms["results"];
+  anewwin=window.open("", "dialog", "resizable=no,scrollbars=no,height=200,width=400,top=200,left=200");
+  anewwin.resizeTo(400,200);
+  frm.add_all.value=1;
+  frm.action="itembox_item_add.asp";
+  frm.target="dialog";
+  frm.submit()
+}
+function itembox_new(aid,anam){
+  var frm = document.forms["results"];
+  var el = document.createElement("OPTION");
+  el.text=anam;
+  el.value=aid;
+  frm.itemboxid.options[frm.itemboxid.options.length]=el;
+  frm.itemboxid[frm.itemboxid.length-1].selected=true;
+}
+function load_article(id){
+
+  alert("Для доступа к полному тексту необходимо вначале войти в библиотеку!");
+  document.getElementById("win_login").className = "expanded";
+  document.getElementById("img_login").src = w_up.src;
+  document.forms["login"].login.focus();
+
+}
+function url_article(idid, urlnum){
+
+  alerts("Для просмотра документа необходимо вначале войти в библиотеку!");
+  document.getElementById("win_login").className = "expanded";
+  document.getElementById("img_login").src = w_up.src;
+  document.forms["login"].login.focus();
+
+}
+function order_item(id, pr){
+
+  alert("Для заказа полного текста публикации необходимо вначале войти в библиотеку!");
+  document.getElementById("win_login").className = "expanded";
+  document.getElementById("img_login").src = w_up.src;
+  document.forms["login"].login.focus();
+
+}
+
+var didScroll = false;
+var didScroll2 = false;
+
+function isVisible(tag) {
+    var t = $(tag);
+    var w = $(window);
+    var wt = w.scrollTop();
+    var tt = t.offset().top;
+    var tb = tt + t.height();
+    return ((tb <= wt + w.height()) && (tt >= wt));
+}
+function pdf_icon(b) {
+  if (!b.prop("shown") && isVisible(b)) {
+    b.prop("shown", true);
+    b.load("ispdf.asp?itemid=" + b.attr('name').substring(4) + "&rand=" + Math.random());
+  }
+}
+function get_pdfs(){
+  $('div[id^="pdf_"]:not(prop("shown"))').each(function(){
+    pdf_icon($(this))
+  });
+}
+setInterval(function() {
+  if ( didScroll2 ) {
+	didScroll2=false;
+	get_pdfs();
+    }
+ }, 200);
+
+$(document).ready(function() { 
+
+$(window).scroll(function() {
+     didScroll = true;
+ });
+
+setInterval(function() {
+  if ( didScroll ) {
+	didScroll=false;
+	didScroll2=true;
+    }
+ }, 500);
+
+	didScroll=true;
+})
+	
+</script>
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Hover_Arrow {position: absolute; width: 15px; height: 11px; cursor: pointer}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuTitle {background-color: #CCCCCC; margin: -1px -1px 1px -1px; text-align: center; font-style: italic; font-size: 80%; color: #444444; padding: 2px 0; overflow: hidden}
+.MathJax_MenuArrow {position: absolute; right: .5em; color: #666666}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_Menu_Close {position: absolute; width: 31px; height: 31px; top: -15px; left: -15px}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style></head>
+
+<body onload='document.all.loading.style.display="none"; document.all.thepage.style.display=""' bgcolor="#f5f5f5"><div id="MathJax_Message" style="display: none;"></div>
+
+<div id="loading" style="position: absolute; width: 100%; text-align: center; top: 300px; display: none;">
+Пожалуйста, подождите, <br>пока Ваш запрос будет обработан
+<br><img src="1_files/query_wait.gif" width="31" vspace="5" height="31" border="0"></div>
+
+<div id="thepage" style="">
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr><td width="100%" valign="top" align="center">
+
+<table width="970" cellspacing="0" cellpadding="0" border="0" background="1_files/bg5.gif">
+<tbody><tr><td width="165" valign="top" align="left">
+
+<table width="150" cellspacing="0" cellpadding="0" border="0">
+
+<tbody><tr><td><img src="1_files/1pix.gif" vspace="14"></td></tr>
+
+<tr><td><a href="https://elibrary.ru/defaultx.asp"><img src="1_files/elibrary_logo.gif" title="eLIBRARY.RU - НАУЧНАЯ ЭЛЕКТРОННАЯ БИБЛИОТЕКА" width="150" height="33" border="0"></a></td></tr>
+<tr><td><img src="1_files/1pix.gif" vspace="9"></td></tr>
+<script language="JavaScript">
+function check_search(){
+if (document.forms["search"].ftext.value.length > 1) {
+  var frm = document.forms["search"];
+  frm.action="/query_results.asp";
+  frm.target="";
+  frm.submit();
+  return false}
+else {
+   alert("Введите не менее двух символов");
+   return false}
+}
+</script>
+<form name="search" action="/query_results.asp" method="POST" onsubmit="return check_search()"></form>
+<input type="hidden" name="where_fulltext" value="on">
+<input type="hidden" name="where_name" value="on">
+<input type="hidden" name="where_abstract" value="on">
+<input type="hidden" name="where_keywords" value="on">
+<input type="hidden" name="where_affiliation" value="">
+<input type="hidden" name="where_references" value="">
+<input type="hidden" name="type_article" value="on">
+<input type="hidden" name="type_disser" value="on">
+<input type="hidden" name="type_book" value="on">
+<input type="hidden" name="type_report" value="on">
+<input type="hidden" name="type_conf" value="on">
+<input type="hidden" name="type_patent" value="on">
+<input type="hidden" name="type_preprint" value="on">
+<input type="hidden" name="search_freetext" value="">
+<input type="hidden" name="search_morph" value="on">
+<input type="hidden" name="search_fulltext" value="">
+<input type="hidden" name="search_open" value="">
+<input type="hidden" name="search_results" value="">
+<input type="hidden" name="titles_all" value="">
+<input type="hidden" name="authors_all" value="">
+<input type="hidden" name="rubrics_all" value="">
+<input type="hidden" name="queryboxid" value="">
+<input type="hidden" name="itemboxid" value="">
+<input type="hidden" name="begin_year" value="">
+<input type="hidden" name="end_year" value="">
+<input type="hidden" name="issues" value="all">
+<input type="hidden" name="orderby" value="rank">
+<input type="hidden" name="order" value="rev">
+<input type="hidden" name="changed" value="1">
+
+<tr><td width="100%" valign="top" align="center">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#555555">
+<tbody><tr><td width="100%" bgcolor="#555555">
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#555555">
+<tbody><tr valign="middle" align="center"><td width="135"><font color="#ffffff">Поиск в библиотеке</font></td><td width="15"><img src="1_files/w_show.gif" class="win_expandable" onclick="hideShow('win_search',this)" width="12" height="12"></td>
+</tr></tbody></table></td></tr></tbody></table>
+<div id="win_search" class="collapsed">
+
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#eeeeee">
+<tbody><tr><td><img src="1_files/1pix.gif"></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<input type="text" name="ftext" size="10" maxlength="255" style="width:120px; border-left: #5c6aa6 1px solid; border-right: #5c6aa6 1px solid; border-top: #5c6aa6 1px solid; border-bottom: #5c6aa6 1px solid"><br>
+<img src="1_files/1pix.gif" vspace="4"><br>
+<input type="submit" value="Поиск" style="color:#ffffff; width:50px; background:#F26C4F; border-left: #F26C4F 0px solid; border-right: #F26C4F 0px solid; border-top: #F26C4F 0px solid; border-bottom: #F26C4F 0px solid">
+</td></tr>
+<tr><td><img src="1_files/1pix.gif"></td></tr>
+</tbody></table>
+
+<table class="menub" width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#dddddd">
+<tbody><tr valign="middle" align="center"><td><a href="https://elibrary.ru/querybox.asp?scope=newquery">Расширенный поиск</a></td></tr></tbody></table>
+</div>
+
+
+
+</td></tr>
+
+<tr><td><img src="1_files/1pix.gif" vspace="9"></td></tr>
+<script language="JavaScript">
+function check_all(){
+  jn=0;
+  if (document.forms["login"].login.value==""){jn=1}
+  if (document.forms["login"].password.value==""){jn=1}
+ if (jn==0){return true}
+ if (jn==1){alert("Не указан пароль или имя читателя!");
+            return false}
+}
+</script>
+
+<form name="login" action="/start_session.asp" method="POST" onsubmit="return check_all()"></form>
+<input type="hidden" name="rpage" value="https://elibrary.ru/query_results.asp?rubrics_all=&amp;changed=1&amp;querybox_name=&amp;where_abstract=on&amp;type_article=on&amp;search_itemboxid=&amp;queryboxid=0&amp;authors_all=Азаров" В="" Н|&search_morph="on&amp;titles_all=&amp;queryid=&amp;ftext=&amp;where_name=on&amp;end_year=0&amp;where_keywords=on&amp;begin_year=0&amp;order=rev&amp;issues=all&amp;orderby=cited&amp;save_queryboxid=0">
+<tr><td width="100%" valign="top" align="center">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#5c6aa6">
+<tbody><tr><td width="100%" bgcolor="#5c6aa6">
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#555555">
+<tbody><tr valign="middle" align="center"><td width="135"><font color="#ffffff">Вход в библиотеку</font>
+</td><td width="15"><img src="1_files/w_hide.gif" class="win_expandable" onclick="hideShow('win_login',this)" id="img_login" width="12" height="12"></td></tr></tbody></table></td></tr></tbody></table>
+<div id="win_login" class="expanded">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#5c6aa6">
+<tbody><tr valign="top"><td width="100%" bgcolor="#5c6aa6" align="center">
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#eeeeee">
+
+<tbody><tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">IP-адрес компьютера:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">213.87.130.69</font></td></tr>
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Название организации:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+
+<font color="#00008f">не определена</font></td></tr>
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Имя пользователя:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<input type="text" name="login" size="10" maxlength="255" style="width:120px; border-left: #5c6aa6 1px solid; border-right: #5c6aa6 1px solid; border-top: #5c6aa6 1px solid; border-bottom: #5c6aa6 1px solid; text-align: center">
+</td></tr>
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Пароль:</font></td></tr>
+<tr><td width="100%" align="center">
+<input type="password" name="password" value="" size="10" maxlength="255" style="width:120px; border-left: #5c6aa6 1px solid; border-right: #5c6aa6 1px solid; border-top: #5c6aa6 1px solid; border-bottom: #5c6aa6 1px solid; text-align: center">
+</td></tr>
+
+<tr><td width="100%" align="center">
+<img src="1_files/1pix.gif" vspace="2"><br>
+<input type="submit" value="Вход" style="color:#ffffff; width:50px; background:#F26C4F; border-left: #F26C4F 0px solid; border-right: #F26C4F 0px solid; border-top: #F26C4F 0px solid; border-bottom: #F26C4F 0px solid">
+</td></tr></tbody></table>
+
+<table width="100%" cellspacing="0" cellpadding="2" border="0" bgcolor="#eeeeee">
+<tbody><tr><td width="14" valign="middle" align="right"><input type="checkbox" name="knowme"></td><td valign="middle" nowrap="nowrap" align="left"><font color="#00008f">Запомнить меня</font></td></tr>
+<tr><td width="14" valign="middle" align="right"><img src="1_files/tr_gray.gif" width="5" hspace="2" height="9" border="0"></td><td valign="middle" nowrap="nowrap" align="left"><a href="https://elibrary.ru/access_terms.asp">Правила доступа</a></td></tr>
+<tr><td width="14" valign="middle" align="right"><img src="1_files/tr_gray.gif" width="5" hspace="2" height="9" border="0"></td><td valign="middle" nowrap="nowrap" align="left"><a href="https://elibrary.ru/author_info.asp?isnew=1&amp;rpage=https%3A%2F%2Felibrary%2Eru%2Fquery%5Fresults%2Easp%3Frubrics%5Fall%3D%26changed%3D1%26querybox%5Fname%3D%26where%5Fabstract%3Don%26type%5Farticle%3Don%26search%5Fitemboxid%3D%26queryboxid%3D0%26authors%5Fall%3D%D0%90%D0%B7%D0%B0%D1%80%D0%BE%D0%B2+%D0%92+%D0%9D%7C%26search%5Fmorph%3Don%26titles%5Fall%3D%26queryid%3D%26ftext%3D%26where%5Fname%3Don%26end%5Fyear%3D0%26where%5Fkeywords%3Don%26begin%5Fyear%3D0%26order%3Drev%26issues%3Dall%26orderby%3Dcited%26save%5Fqueryboxid%3D0">Регистрация</a></td></tr>
+<tr><td width="14" valign="middle" align="right"><img src="1_files/tr_gray.gif" width="5" hspace="2" height="9" border="0"></td><td valign="middle" nowrap="nowrap" align="left"><a href="https://elibrary.ru/pass_request.asp">Забыли пароль?</a></td></tr>
+<tr><td colspan="2"><img src="1_files/1pix.gif"></td></tr>
+</tbody></table>
+</td></tr></tbody></table>
+</div>
+</td></tr>
+
+
+<tr><td><img src="1_files/1pix.gif" vspace="9"></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#5c6aa6">
+<tbody><tr><td width="100%" bgcolor="#5c6aa6">
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#5c6aa6">
+<tbody><tr valign="middle" align="center"><td width="135"><font color="#ffffff">Навигатор</font>
+</td><td width="15"><img src="1_files/w_hide.gif" class="win_expandable" onclick="hideShow('win_goto',this)" width="12" height="12"></td></tr></tbody></table></td></tr></tbody></table>
+<div id="win_goto" class="expanded">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#5c6aa6">
+<tbody><tr valign="top"><td width="100%" bgcolor="#5c6aa6">
+<table width="100%" cellspacing="0" cellpadding="2" border="0" bgcolor="#eeeeee">
+
+<tbody><tr><td valign="middle" bgcolor="#eeeeee" align="right"><a href="https://elibrary.ru/titles.asp">ЖУРНАЛЫ</a></td><td width="14" valign="middle" align="right"><img src="1_files/tr_gray.gif" width="5" hspace="2" height="9" border="0"></td></tr>
+<tr><td valign="middle" bgcolor="#eeeeee" align="right"><a href="https://elibrary.ru/books.asp">КНИГИ</a></td><td width="14" valign="middle" align="right"><img src="1_files/tr_gray.gif" width="5" hspace="2" height="9" border="0"></td></tr>
+<tr><td valign="middle" bgcolor="#eeeeee" align="right"><a href="https://elibrary.ru/patents.asp">ПАТЕНТЫ</a></td><td width="14" valign="middle" align="right"><img src="1_files/tr_gray.gif" width="5" hspace="2" height="9" border="0"></td></tr>
+<tr><td valign="middle" bgcolor="#eeeeee" align="right"><a href="https://elibrary.ru/querybox.asp">ПОИСК</a></td><td width="14" valign="middle" align="right"><img src="1_files/tr_gray.gif" width="5" hspace="2" height="9" border="0"></td></tr>
+<tr><td valign="middle" bgcolor="#eeeeee" align="right"><a href="https://elibrary.ru/authors.asp">АВТОРЫ</a></td><td width="14" valign="middle" align="right"><img src="1_files/tr_gray.gif" width="5" hspace="2" height="9" border="0"></td></tr>
+<tr><td valign="middle" bgcolor="#eeeeee" align="right"><a href="https://elibrary.ru/orgs.asp">ОРГАНИЗАЦИИ</a></td><td width="14" valign="middle" align="right"><img src="1_files/tr_gray.gif" width="5" hspace="2" height="9" border="0"></td></tr>
+<tr><td valign="middle" bgcolor="#eeeeee" align="right"><a href="https://elibrary.ru/keywords.asp">КЛЮЧЕВЫЕ СЛОВА</a></td><td width="14" valign="middle" align="right"><img src="1_files/tr_gray.gif" width="5" hspace="2" height="9" border="0"></td></tr>
+<tr><td valign="middle" bgcolor="#eeeeee" align="right"><a href="https://elibrary.ru/rubrics.asp">РУБРИКАТОР</a></td><td width="14" valign="middle" align="right"><img src="1_files/tr_gray.gif" width="5" hspace="2" height="9" border="0"></td></tr>
+
+
+<tr><td colspan="2"><img src="1_files/1pix.gif"></td></tr>
+<tr valign="middle" bgcolor="#dddddd" align="center"><td colspan="2" class="menub"><a href="https://elibrary.ru/defaultx.asp">Начальная страница</a></td></tr>
+</tbody></table>
+</td></tr></tbody></table>
+</div>
+</td></tr>
+
+<tr><td><img src="1_files/1pix.gif" vspace="9"></td></tr>
+<script language="JavaScript">
+function end_session(){
+
+  document.forms["session"].saveuser.value="1";
+
+  document.forms["session"].action="/end_session.asp";
+  document.forms["session"].target="";
+  document.forms["session"].submit()
+}
+</script>
+<form action="/end_session.asp" method="POST" name="session"></form>
+<input type="hidden" name="saveuser" value="1">
+
+
+
+<tr><td width="100%" valign="top" align="center">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#5c6aa6">
+<tbody><tr><td width="100%" bgcolor="#5c6aa6">
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#5c6aa6">
+<tbody><tr valign="middle" align="center"><td width="135"><font color="#ffffff">Текущая сессия</font>
+</td><td width="15"><img src="1_files/w_show.gif" class="win_expandable" onclick="hideShow('win_session',this)" width="12" height="12"></td></tr></tbody></table></td></tr></tbody></table>
+<div id="win_session" class="collapsed">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#5c6aa6">
+<tbody><tr valign="top"><td width="100%" bgcolor="#5c6aa6" align="center">
+<table width="100%" cellspacing="0" cellpadding="1" border="0" bgcolor="#eeeeee">
+<tbody><tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Имя пользователя:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">Незарегистрированный пользователь</font></td></tr>
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">IP-адрес компьютера:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">213.87.130.69</font></td></tr>
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Название организации:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+
+<font color="#00008f">не определена</font></td></tr>
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Начало работы:</font></td></tr>
+
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">05.04.2023 11:10</font></td></tr>
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Время работы:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">00:34</font></td></tr>
+
+<tr><td class="menub" width="100%" bgcolor="#dddddd" align="center">
+<a href="https://elibrary.ru/project_user_office.asp">Личный кабинет</a></td></tr>
+
+<tr><td class="menub" width="100%" bgcolor="#dddddd" align="center">
+<a href="javascript:end_session()">Закрыть сессию</a></td></tr>
+</tbody></table>
+</td></tr></tbody></table>
+</div>
+</td></tr>
+
+<tr><td><img src="1_files/1pix.gif" vspace="9"></td></tr>
+
+<tr><td width="100%" valign="top" align="center">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#5c6aa6">
+<tbody><tr><td width="100%" bgcolor="#5c6aa6">
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#5c6aa6">
+<tbody><tr valign="middle" align="center"><td width="135"><font color="#ffffff">Легенда</font>
+</td><td width="15"><img src="1_files/w_hide.gif" class="win_expandable" onclick="hideShow('win_legend',this)" width="12" height="12"></td></tr></tbody></table></td></tr></tbody></table>
+<div id="win_legend" class="expanded">
+
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#eeeeee">
+<tbody><tr><td colspan="2"><img src="1_files/1pix.gif" vspace="2"><br></td></tr>
+<tr><td width="15%" valign="top" align="right"><img src="1_files/download_green.png" width="16" hspace="3" border="0"></td>
+<td width="85%" valign="middle" align="left"><font color="#00008f">Доступ к полному тексту документа открыт</font></td></tr>
+<tr><td width="15%" valign="top" align="right"><img src="1_files/download_blue.png" width="16" hspace="3" border="0"></td>
+<td width="85%" valign="middle" align="left"><font color="#00008f">Полный текст доступен на сайте издателя</font></td></tr>
+<tr><td width="15%" valign="top" align="right"><img src="1_files/download_yellow.png" width="16" hspace="3" border="0"></td>
+<td width="85%" valign="middle" align="left"><font color="#00008f">Полный текст может быть получен через систему заказа</font></td></tr>
+<tr><td width="15%" valign="top" align="right"><img src="1_files/download_orange.png" width="16" hspace="3" border="0"></td>
+<td width="85%" valign="middle" align="left"><font color="#00008f">Доступ к полному тексту закрыт</font></td></tr>
+<tr><td valign="top" align="center"><font color="#00008f">-</font></td><td align="left"><font color="#00008f">Если иконки нет - полный текст документа отсутствует в НЭБ</font></td></tr>
+
+<tr><td colspan="2"><img src="1_files/1pix.gif" vspace="2"><br></td></tr>
+</tbody></table>
+
+</div>
+</td></tr>
+
+
+<tr><td><img src="1_files/1pix.gif" vspace="9"></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#5c6aa6">
+<tbody><tr><td width="100%" bgcolor="#5c6aa6">
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#5c6aa6">
+<tbody><tr valign="middle" align="center"><td width="135"><font color="#ffffff">Контакты</font>
+</td><td width="15"><img src="1_files/w_show.gif" class="win_expandable" onclick="hideShow('win_contact',this)" width="12" height="12"></td></tr></tbody></table></td></tr></tbody></table>
+<div id="win_contact" class="collapsed">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#eeeeee">
+<tbody><tr><td colspan="2"><img src="1_files/1pix.gif" vspace="2"><br></td></tr>
+<tr valign="top"><td width="100%" bgcolor="#5c6aa6" align="center">
+<table width="100%" cellspacing="0" cellpadding="1" border="0" bgcolor="#eeeeee">
+
+<tbody><tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Служба поддержки:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">(7-495) 544-2494 доб. 1<br></font>
+<font color="#00008f"><a href="mailto:support@elibrary.ru">support@elibrary.ru</a></font></td></tr>
+
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+<font color="#000000">Издателям журналов:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">(7-495) 544-2494 доб. 2<br></font>
+<font color="#00008f"><a href="mailto:publish@elibrary.ru">publish@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+<font color="#000000">Издателям книг:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">(7-495) 544-2494 доб. 3<br></font>
+<font color="#00008f"><a href="mailto:book@elibrary.ru">book@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+<font color="#000000">Издателям (Science Space):</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">+7(495) 544-2494 доб. 4<br></font>
+<font color="#00008f"><a href="mailto:info@sciencespace.ru">info@sciencespace.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+<font color="#000000">Организациям (Science Index):</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">+7(495) 544-2494 доб. 4<br></font>
+<font color="#00008f"><a href="mailto:org@scienceindex.ru">org@scienceindex.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Доступ к API:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">+7(495) 544-2494 доб. 4<br></font>
+<font color="#00008f"><a href="mailto:api@elibrary.ru">api@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">DOI для издательств:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">+7(495) 544-2494 доб. 5<br></font>
+<font color="#00008f"><a href="mailto:doi@elibrary.ru">doi@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Подписчикам:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">+7(495) 544-2494 доб. 6<br></font>
+<font color="#00008f"><a href="mailto:sales.team@elibrary.ru">sales.team@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+<font color="#000000">Конференции и семинары:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">+7(495) 544-2494 доб. 7<br></font>
+<font color="#00008f"><a href="mailto:conf@elibrary.ru">conf@elibrary.ru</a></font></td></tr>
+
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Почтовый адрес:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f">117246, г. Москва, Научный проезд, д. 14А, стр. 3, таунхаус 1</font><br><a href="https://elibrary.ru/contact_new.asp"><b>схема проезда</b></a></td></tr>
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Веб-сайт:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f"><a href="https://elibrary.ru/">https://elibrary.ru</a></font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f"><a href="http://e-library.ru/">http://e-library.ru</a></font>
+</td></tr>
+
+
+<tr><td width="100%" valign="top" bgcolor="#dddddd" align="left">
+&nbsp;<font color="#000000">Размещение рекламы:</font></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<font color="#00008f"><a href="mailto:reklama@elibrary.ru">reklama@elibrary.ru</a></font></td></tr>
+
+<tr><td><img src="1_files/1pix.gif" vspace="1"></td></tr>
+</tbody></table>
+</td></tr>
+<tr><td colspan="2"><img src="1_files/1pix.gif" vspace="2"><br></td></tr>
+</tbody></table>
+</div>
+</td></tr>
+
+<tr><td><img src="1_files/1pix.gif" vspace="9"></td></tr>
+<tr><td width="100%" valign="top" align="center">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#5c6aa6">
+<tbody><tr><td width="100%" bgcolor="#5c6aa6">
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#5c6aa6">
+<tbody><tr valign="middle" align="center"><td width="135"><font color="#ffffff">Копирайт</font>
+</td><td width="15"><img src="1_files/w_show.gif" class="win_expandable" onclick="hideShow('win_copyright',this)" width="12" height="12"></td></tr></tbody></table></td></tr></tbody></table>
+<div id="win_copyright" class="collapsed">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#5c6aa6">
+<tbody><tr valign="top"><td width="100%" bgcolor="#5c6aa6" align="center">
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#eeeeee">
+<tbody><tr><td width="100%" valign="top" bgcolor="#eeeeee" align="center">
+<img src="1_files/1pix.gif" vspace="2"><br><font color="#00008f"><a href="https://elibrary.ru/copyright.asp">© 2000-2015<br>ООО НАУЧНАЯ ЭЛЕКТРОННАЯ БИБЛИОТЕКА</a></font><br><img src="1_files/1pix.gif" vspace="2"></td></tr>
+<tr><td class="menub" width="100%" bgcolor="#dddddd" align="center"><a href="https://elibrary.ru/copyright.asp">
+Все права защищены.</a></td></tr>
+
+</tbody></table>
+</td></tr>
+</tbody></table>
+</div>
+</td></tr>
+
+<tr><td><img src="1_files/1pix.gif" vspace="9"></td></tr>
+<tr><td width="100%" valign="top" align="center">
+
+
+<!-- Yandex.Metrika -->
+<div style="display:none;"><script type="text/javascript">
+(function(w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter171463 = new Ya.Metrika(171463);
+        } catch(e) {}
+    });
+})(window, 'yandex_metrika_callbacks');
+</script></div>
+<script src="1_files/watch.js" type="text/javascript" defer="defer"></script>
+<noscript><div style="position:absolute"><img src="//mc.yandex.ru/watch/171463" alt="" /></div></noscript>
+<!-- /Yandex.Metrika -->
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-9339902-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
+</script>
+
+
+</td></tr>
+<tr><td><img src="1_files/1pix.gif" vspace="9"></td></tr>
+
+
+
+</tbody></table>
+
+</td><td width="580" valign="top" align="center">
+
+
+
+<table width="580" cellspacing="0" cellpadding="0" border="0">
+
+<tbody><tr><td width="100%" valign="top" align="center">
+<img src="1_files/1pix.gif" vspace="6"><br>
+
+
+<table width="580" cellspacing="0" cellpadding="0" border="0">
+<form method="post" name="results" action="query_results.asp"></form>
+<input type="hidden" name="add_all" value="">
+<input type="hidden" name="paysum" value="">
+<input type="hidden" name="payitemid" value="">
+<input type="hidden" name="id" value="">
+<input type="hidden" name="authorid" value="">
+<input type="hidden" name="did" value="1">
+<input type="hidden" name="urlnum" value="1">
+
+<tbody><tr><td width="10" height="14"></td>
+<td rowspan="5" width="75" valign="middle" height="65" align="center">
+<table width="100%" height="100%" cellspacing="1" cellpadding="0" border="0" bgcolor="#ffffff">
+<tbody><tr><td width="100%" valign="middle" height="100%" bgcolor="#eeeeee" align="center"><img src="1_files/menu_journ.jpg" style="filter:alpha(opacity=70)" onmouseover="this.filters.alpha.opacity=90" onmouseout="this.filters.alpha.opacity=70" width="73" height="63" border="0"></td></tr></tbody></table></td>
+<td width="495"></td></tr>
+<tr><td bgcolor="#555555"><img src="1_files/1pix.gif"></td>
+<td valign="middle" height="19" bgcolor="#555555" align="right"><font color="#ffffff"><b>РЕЗУЛЬТАТЫ ПОИСКОВОГО ЗАПРОСА</b><img src="1_files/1pix.gif" hspace="10"></font></td></tr>
+<tr><td height="1" bgcolor="#ffffff"></td><td bgcolor="#ffffff"></td></tr>
+<tr><td height="14" bgcolor="#dddddd"></td><td bgcolor="#f5f5f5" background="1_files/line1_gr.gif"></td></tr>
+<tr><td height="9"></td><td></td></tr>
+</tbody></table>
+</td></tr>
+
+<tr><td width="100%" valign="top" align="center">
+
+<img src="1_files/1pix.gif" vspace="3"><br>
+<b><font color="#00008f">&nbsp;&nbsp;&nbsp;ВСЕГО НАЙДЕНО ПУБЛИКАЦИЙ: </font><font color="#ff0000">255</font><font color="#00008f"> из </font><font color="#ff0000">41249690</font></b><br>
+
+<img src="1_files/1pix.gif" vspace="3"><br>
+
+
+
+
+
+<table id="restab" width="580" cellspacing="1" cellpadding="3" bgcolor="#ffffff">
+<tbody><tr valign="middle" align="center">
+<td width="30" bgcolor="#555555"><font color="#ffffff">№</font></td>
+<td width="520" bgcolor="#555555"><font color="#ffffff">Публикация</font></td>
+<td width="30" bgcolor="#555555"><font color="#ffffff">Цит.</font></td></tr>
+
+<tr id="a29650649" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>1</b></font><br><input type="checkbox" name="tid29650649" id="tid29650649" onclick="if (this.checked) {RowSelect(a29650649,1)} else {RowSelect(a29650649,0)}"><div id="pdf_29650649" name="pdf_29650649"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=29650649"><b><span style="line-height:1.0;">МЕТОДИКА МИКРОСКОПИЧЕСКОГО АНАЛИЗА ДИСПЕРСНОГО СОСТАВА ПЫЛИ С ПРИМЕНЕНИЕМ ПЕРСОНАЛЬНОГО КОМПЬЮТЕРА (ПК)</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Юркъян В.Ю., Сергина Н.М., Ковалева А.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33744645">Законодательная и прикладная метрология</a>. 
+2004. 
+<a href="https://elibrary.ru/contents.asp?id=33744645&amp;selid=29650649">№&nbsp;1</a>.  С. 46-48.
+
+</font></td><td valign="middle" align="center">141</td></tr>
+
+
+<tr id="a18000293" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>2</b></font><br><input type="checkbox" name="tid18000293" id="tid18000293" onclick="if (this.checked) {RowSelect(a18000293,1)} else {RowSelect(a18000293,0)}"><div id="pdf_18000293" name="pdf_18000293"><a href="javascript:load_article(18000293)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=18000293"><b><span style="line-height:1.0;">ОБ ОЦЕНКЕ КОНЦЕНТРАЦИИ МЕЛКОДИСПЕРСНОЙ ПЫЛИ (РМ <sub>10</sub> И РМ <sub>2,5</sub>) В ВОЗДУШНОЙ СРЕДЕ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Тертишников И.В., Калюжина Е.А., Маринин Н.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33753232">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2011. 
+<a href="https://elibrary.ru/contents.asp?id=33753232&amp;selid=18000293">№&nbsp;25&nbsp;(44)</a>.  С. 402-406.
+
+</font></td><td valign="middle" align="center">86</td></tr>
+
+
+<tr id="a24011520" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>3</b></font><br><input type="checkbox" name="tid24011520" id="tid24011520" onclick="if (this.checked) {RowSelect(a24011520,1)} else {RowSelect(a24011520,0)}"><div id="pdf_24011520" name="pdf_24011520"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=24011520"><b><span style="line-height:1.0;">EXPERIMENTAL
+ STUDY OF SECONDARY SWIRLING FLOW INFLUENCE ON FLOWS STRUCTURE AT 
+SEPARATION CHAMBER INLET OF DUST COLLECTOR WITH COUNTER SWIRLING FLOWS</span></b></a><br><font color="#00008f"><i>Azarov V.N., Lukanin D.V., Borovkov D.P., Redhwan A.M.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34098208">International Review of Mechanical Engineering</a>. 
+2014. 
+Т. 8. <a href="https://elibrary.ru/contents.asp?id=34098208&amp;selid=24011520">№&nbsp;5</a>.  С. 851-856.
+
+</font></td><td valign="middle" align="center">62</td></tr>
+
+
+<tr id="a23993813" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>4</b></font><br><input type="checkbox" name="tid23993813" id="tid23993813" onclick="if (this.checked) {RowSelect(a23993813,1)} else {RowSelect(a23993813,0)}"><div id="pdf_23993813" name="pdf_23993813"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=23993813"><b><span style="line-height:1.0;">APPLICATION OF SWIRLING FLOWS IN ASPIRATION SYSTEMS</span></b></a><br><font color="#00008f"><i>Azarov V.N., Borovkov D.P., Redhwan A.M.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34095451">International Review of Mechanical Engineering</a>. 
+2014. 
+Т. 8. <a href="https://elibrary.ru/contents.asp?id=34095451&amp;selid=23993813">№&nbsp;4</a>.  С. 750-753.
+
+</font></td><td valign="middle" align="center">53</td></tr>
+
+
+<tr id="a21323544" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>5</b></font><br><input type="checkbox" name="tid21323544" id="tid21323544" onclick="if (this.checked) {RowSelect(a21323544,1)} else {RowSelect(a21323544,0)}"><div id="pdf_21323544" name="pdf_21323544"><a href="javascript:load_article(21323544)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=21323544"><b><span style="line-height:1.0;">ТЕХНОГЕННОЕ
+ ЗАГРЯЗНЕНИЕ АТМОСФЕРНОГО ВОЗДУХА И ЕГО ВЛИЯНИЕ НА 
+СОЦИАЛЬНО-ЭКОЛОГИЧЕСКОЕ БЛАГОПОЛУЧИЕ ГОРОДОВ-КУРОРТОВ КАВКАЗСКИХ 
+МИНЕРАЛЬНЫХ ВОД</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Сидякин П.А., Лопатина Т.Н., Николенко Д.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33948915">Социология города</a>. 
+2014. 
+<a href="https://elibrary.ru/contents.asp?id=33948915&amp;selid=21323544">№&nbsp;1</a>.  С. 28-37.
+
+</font></td><td valign="middle" align="center">48</td></tr>
+
+
+<tr id="a17826744" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>6</b></font><br><input type="checkbox" name="tid17826744" id="tid17826744" onclick="if (this.checked) {RowSelect(a17826744,1)} else {RowSelect(a17826744,0)}"><div id="pdf_17826744" name="pdf_17826744"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=17826744"><b><span style="line-height:1.0;">НОРМИРОВАНИЕ РМ10 И РМ2,5 КАК СОЦИАЛЬНЫЕ СТАНДАРТЫ КАЧЕСТВА ЖИЗНИ В РАЙОНАХ РАСПОЛОЖЕНИЯ ПРЕДПРИЯТИЙ СТРОЙИНДУСТРИИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Тертишников И.В., Маринин Н.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33742057">Жилищное строительство</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=33742057&amp;selid=17826744">№&nbsp;3</a>.  С. 20-23.
+
+</font></td><td valign="middle" align="center">48</td></tr>
+
+
+<tr id="a17263862" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>7</b></font><br><input type="checkbox" name="tid17263862" id="tid17263862" onclick="if (this.checked) {RowSelect(a17263862,1)} else {RowSelect(a17263862,0)}"><div id="pdf_17263862" name="pdf_17263862"><a href="javascript:load_article(17263862)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=17263862"><b><span style="line-height:1.0;">ОБ ОЦЕНКЕ КОНЦЕНТРАЦИИ МЕЛКОДИСПЕРСНОЙ ПЫЛИ (РМ10 И РМ2,5) В АТМОСФЕРЕ ГОРОДОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Маринин Н.А., Жоголева Д.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33725732">Известия Юго-Западного государственного университета</a>. 
+2011. 
+<a href="https://elibrary.ru/contents.asp?id=33725732&amp;selid=17263862">№&nbsp;5-2&nbsp;(38)</a>.  С. 144-148.
+
+</font></td><td valign="middle" align="center">48</td></tr>
+
+
+<tr id="a29472966" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>8</b></font><br><input type="checkbox" name="tid29472966" id="tid29472966" onclick="if (this.checked) {RowSelect(a29472966,1)} else {RowSelect(a29472966,0)}"><div id="pdf_29472966" name="pdf_29472966"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=29472966"><b><span style="line-height:1.0;">AERODYNAMIC CHARACTERISTICS OF DUST IN THE EMISSIONS INTO THE ATMOSPHERE AND WORKING ZONE OF CONSTRUCTION ENTERPRISES</span></b></a><br><font color="#00008f"><i>Azarov V.N., Batmanov V.P., Strelyaeva A.B., Lupinogin V.V., Evtushenko A.I.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34490251">International Review of Civil Engineering</a>. 
+2016. 
+Т. 7. <a href="https://elibrary.ru/contents.asp?id=34490251&amp;selid=29472966">№&nbsp;5</a>.  С. 132-136.
+
+</font></td><td valign="middle" align="center">45</td></tr>
+
+
+<tr id="a23659909" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>9</b></font><br><input type="checkbox" name="tid23659909" id="tid23659909" onclick="if (this.checked) {RowSelect(a23659909,1)} else {RowSelect(a23659909,0)}"><div id="pdf_23659909" name="pdf_23659909"><a href="javascript:load_article(23659909)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=23659909"><b><span style="line-height:1.0;">К ОПРЕДЕЛЕНИЮ ФАКТИЧЕСКИХ РАЗМЕРОВ ЧАСТИЦ ПЫЛИ ВЫБРОСОВ СТРОЙИНДУСТРИИ И СТРОИТЕЛЬСТВА</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Кошкарев С.А., Николенко М.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34078652">Инженерный вестник Дона</a>. 
+2015. 
+<a href="https://elibrary.ru/contents.asp?id=34078652&amp;selid=23659909">№&nbsp;1-2&nbsp;(34)</a>.  С. 44.
+
+</font></td><td valign="middle" align="center">39</td></tr>
+
+
+<tr id="a25589026" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>10</b></font><br><input type="checkbox" name="tid25589026" id="tid25589026" onclick="if (this.checked) {RowSelect(a25589026,1)} else {RowSelect(a25589026,0)}"><div id="pdf_25589026" name="pdf_25589026"><a href="javascript:load_article(25589026)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=25589026"><b><span style="line-height:1.0;">ОБ ИССЛЕДОВАНИИ ЗАГРЯЗНЕНИЯ ВОЗДУШНОЙ СРЕДЫ МЕЛКОДИСПЕРСНОЙ ПЫЛЬЮ С ИСПОЛЬЗОВАНИЕМ АППАРАТА СЛУЧАЙНЫХ ФУНКЦИЙ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Барикаева Н.С., Николенко Д.А., Соловьева Т.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34221582">Инженерный вестник Дона</a>. 
+2015. 
+<a href="https://elibrary.ru/contents.asp?id=34221582&amp;selid=25589026">№&nbsp;4&nbsp;(38)</a>.  С. 75.
+
+</font></td><td valign="middle" align="center">38</td></tr>
+
+
+<tr id="a23659894" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>11</b></font><br><input type="checkbox" name="tid23659894" id="tid23659894" onclick="if (this.checked) {RowSelect(a23659894,1)} else {RowSelect(a23659894,0)}"><div id="pdf_23659894" name="pdf_23659894"><a href="javascript:load_article(23659894)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=23659894"><b><span style="line-height:1.0;">СНИЖЕНИЕ ВЫБРОСОВ СИСТЕМ ОБЕСПЫЛИВАНИЯ С ИСПОЛЬЗОВАНИЕМ ДИСПЕРСИОННОГО АНАЛИЗА ПЫЛИ В СТРОЙИНДУСТРИИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Кошкарев С.А., Николенко М.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34078652">Инженерный вестник Дона</a>. 
+2015. 
+<a href="https://elibrary.ru/contents.asp?id=34078652&amp;selid=23659894">№&nbsp;1-2&nbsp;(34)</a>.  С. 30.
+
+</font></td><td valign="middle" align="center">38</td></tr>
+
+
+<tr id="a9558492" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>12</b></font><br><input type="checkbox" name="tid9558492" id="tid9558492" onclick="if (this.checked) {RowSelect(a9558492,1)} else {RowSelect(a9558492,0)}"><div id="pdf_9558492" name="pdf_9558492"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=9558492"><b><span style="line-height:1.0;">СИСТЕМЫ ПЫЛЕУЛАВЛИВАНИЯ С ИНЕРЦИОННЫМИ АППАРАТАМИ В ПРОИЗВОДСТВЕ СТРОИТЕЛЬНЫХ МАТЕРИАЛОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Сергина Н.М.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33188460">Строительные материалы</a>. 
+2003. 
+<a href="https://elibrary.ru/contents.asp?id=33188460&amp;selid=9558492">№&nbsp;8</a>.  С. 14-15.
+
+</font></td><td valign="middle" align="center">37</td></tr>
+
+
+<tr id="a21830057" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>13</b></font><br><input type="checkbox" name="tid21830057" id="tid21830057" onclick="if (this.checked) {RowSelect(a21830057,1)} else {RowSelect(a21830057,0)}"><div id="pdf_21830057" name="pdf_21830057"><a href="javascript:load_article(21830057)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=21830057"><b><span style="line-height:1.0;">О ЗАГРЯЗНЕНИИ МЕЛКОДИСПЕРСНОЙ ПЫЛЬЮ ВОЗДУШНОЙ СРЕДЫ ГОРОДСКИХ ТЕРРИТОРИЙ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Маринин Н.А., Барикаева Н.С., Лопатина Т.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33976822">Биосферная совместимость: человек, регион, технологии</a>. 
+2013. 
+<a href="https://elibrary.ru/contents.asp?id=33976822&amp;selid=21830057">№&nbsp;1&nbsp;(1)</a>.  С. 30-34.
+
+</font></td><td valign="middle" align="center">34</td></tr>
+
+
+<tr id="a20363028" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>14</b></font><br><input type="checkbox" name="tid20363028" id="tid20363028" onclick="if (this.checked) {RowSelect(a20363028,1)} else {RowSelect(a20363028,0)}"><div id="pdf_20363028" name="pdf_20363028"><a href="javascript:load_article(20363028)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=20363028"><b><span style="line-height:1.0;">О ДИСПЕРСНОМ СОСТАВЕ ПЫЛИ В ВОЗДУШНОЙ СРЕДЕ В ПРОИЗВОДСТВЕ СТРОИТЕЛЬНЫХ МАТЕРИАЛОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Маринин Н.А., Бурханова Р.А., Азаров А.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33849729">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2013. 
+<a href="https://elibrary.ru/contents.asp?id=33849729&amp;selid=20363028">№&nbsp;30&nbsp;(49)</a>.  С. 256-260.
+
+</font></td><td valign="middle" align="center">30</td></tr>
+
+
+<tr id="a27035201" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>15</b></font><br><input type="checkbox" name="tid27035201" id="tid27035201" onclick="if (this.checked) {RowSelect(a27035201,1)} else {RowSelect(a27035201,0)}"><div id="pdf_27035201" name="pdf_27035201"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=27035201"><b><span style="line-height:1.0;">MAIN TRENDS OF DUST CONDITIONS NORMALIZING AT CEMENT MANUFACTURING PLANTS</span></b></a><br><font color="#00008f"><i>Menzelitseva N.V., Azarov V.N., Karapuzova N.Y., Redhwan A.M.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34310844">International Review of Civil Engineering</a>. 
+2016. 
+Т. 6. <a href="https://elibrary.ru/contents.asp?id=34310844&amp;selid=27035201">№&nbsp;6</a>.  С. 145-150.
+
+</font></td><td valign="middle" align="center">28</td></tr>
+
+
+<tr id="a24044464" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>16</b></font><br><input type="checkbox" name="tid24044464" id="tid24044464" onclick="if (this.checked) {RowSelect(a24044464,1)} else {RowSelect(a24044464,0)}"><div id="pdf_24044464" name="pdf_24044464"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=24044464"><b><span style="line-height:1.0;">METHODS
+ OF REDUCING THE POWER REQUIREMENTS OF VENTILATION SYSTEMS. PART 4. 
+THEORETICAL PREREQUISITES FOR THE CREATION OF DUST LOCALIZING DEVICES 
+WITH SWIRLING AIR FLOWS1</span></b></a><br><font color="#00008f"><i>Logachev I.N., Logachev K.I., Averkova O.A., Azarov V.N., Uvarov V.A.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34054523">Refractories and Industrial Ceramics</a>. 
+2014. 
+Т. 55. <a href="https://elibrary.ru/contents.asp?id=34054523&amp;selid=24044464">№&nbsp;4</a>.  С. 365-370.
+
+</font></td><td valign="middle" align="center">28</td></tr>
+
+
+<tr id="a18854335" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>17</b></font><br><input type="checkbox" name="tid18854335" id="tid18854335" onclick="if (this.checked) {RowSelect(a18854335,1)} else {RowSelect(a18854335,0)}"><div id="pdf_18854335" name="pdf_18854335"><a href="javascript:load_article(18854335)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=18854335"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЯ ЗНАЧЕНИЙ РМ <sub>10</sub> И РМ <sub>2,5 </sub>В ВЫБРОСАХ В АТМОСФЕРУ И РАБОЧУЮ ЗОНУ ПРИ РЕМОНТНО-СТРОИТЕЛЬНЫХ РАБОТАХ</span></b></a><br><font color="#00008f"><i>Калюжина Е.А., Несветаев Г.В., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33821014">Интернет-вестник ВолгГАСУ</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=33821014&amp;selid=18854335">№&nbsp;1&nbsp;(20)</a>.  С. 24.
+
+</font></td><td valign="middle" align="center">27</td></tr>
+
+
+<tr id="a11614812" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>18</b></font><br><input type="checkbox" name="tid11614812" id="tid11614812" onclick="if (this.checked) {RowSelect(a11614812,1)} else {RowSelect(a11614812,0)}"><div id="pdf_11614812" name="pdf_11614812"><a href="javascript:load_article(11614812)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=11614812"><b><span style="line-height:1.0;">ОЦЕНКА ПЫЛЕВЫДЕЛЕНИЯ ИЗ ТЕХНОЛОГИЧЕСКОГО ОБОРУДОВАНИЯ</span></b></a><br><font color="#00008f"><i>Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33271588">Безопасность труда в промышленности</a>. 
+2003. 
+<a href="https://elibrary.ru/contents.asp?id=33271588&amp;selid=11614812">№&nbsp;7</a>.  С. 45-46.
+
+</font></td><td valign="middle" align="center">27</td></tr>
+
+
+<tr id="a18000292" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>19</b></font><br><input type="checkbox" name="tid18000292" id="tid18000292" onclick="if (this.checked) {RowSelect(a18000292,1)} else {RowSelect(a18000292,0)}"><div id="pdf_18000292" name="pdf_18000292"><a href="javascript:load_article(18000292)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=18000292"><b><span style="line-height:1.0;">ОБ ОРГАНИЗАЦИИ МОНИТОРИНГА РМ <sub>10</sub> И РМ <sub>2,5</sub> НА ПРИМЕРЕ Г. ВОЛГОГРАДА</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Калюжина Е.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33753232">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2011. 
+<a href="https://elibrary.ru/contents.asp?id=33753232&amp;selid=18000292">№&nbsp;25&nbsp;(44)</a>.  С. 398-401.
+
+</font></td><td valign="middle" align="center">26</td></tr>
+
+
+<tr id="a25643953" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>20</b></font><br><input type="checkbox" name="tid25643953" id="tid25643953" onclick="if (this.checked) {RowSelect(a25643953,1)} else {RowSelect(a25643953,0)}"><div id="pdf_25643953" name="pdf_25643953"><a href="javascript:load_article(25643953)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=25643953"><b><span style="line-height:1.0;">ПОВЫШЕНИЕ
+ ЭКОЛОГИЧЕСКОЙ БЕЗОПАСНОСТИ СТРОЙИНДУСТРИИ СОВЕРШЕНСТВОВАНИЕМ СИСТЕМ 
+ОБЕСПЫЛИВАНИЯ С ИСПОЛЬЗОВАНИЕМ КОМПЛЕКСНОГО ДИСПЕРСИОННОГО АНАЛИЗА 
+ПЫЛЕВЫХ ВЫБРОСОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Кошкарев С.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34223607">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2016. 
+<a href="https://elibrary.ru/contents.asp?id=34223607&amp;selid=25643953">№&nbsp;43&nbsp;(62)</a>.  С. 161-174.
+
+</font></td><td valign="middle" align="center">24</td></tr>
+
+
+<tr id="a23139923" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>21</b></font><br><input type="checkbox" name="tid23139923" id="tid23139923" onclick="if (this.checked) {RowSelect(a23139923,1)} else {RowSelect(a23139923,0)}"><div id="pdf_23139923" name="pdf_23139923"><a href="javascript:load_article(23139923)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=23139923"><b><span style="line-height:1.0;">ОЦЕНКА ЭФФЕКТИВНОСТИ АППАРАТА МОКРОЙ ОЧИСТКИ ОБЕСПЫЛИВАНИЯ ВЫБРОСОВ ПЕЧЕЙ ОБЖИГА КЕРАМЗИТА</span></b></a><br><font color="#00008f"><i>Кошкарев С.А., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34059292">Инженерно-строительный журнал</a>. 
+2015. 
+<a href="https://elibrary.ru/contents.asp?id=34059292&amp;selid=23139923">№&nbsp;2&nbsp;(54)</a>.  С. 18-32.
+
+</font></td><td valign="middle" align="center">23</td></tr>
+
+
+<tr id="a36545578" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>22</b></font><br><input type="checkbox" name="tid36545578" id="tid36545578" onclick="if (this.checked) {RowSelect(a36545578,1)} else {RowSelect(a36545578,0)}"><div id="pdf_36545578" name="pdf_36545578"><a href="javascript:load_article(36545578)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=36545578"><b><span style="line-height:1.0;">ФИТОМОНИТОРИНГ И ПРОМЫШЛЕННЫЙ ЭКОФИТОДИЗАЙН: НОВЫЙ ПОДХОД В ОБЕСПЕЧЕНИИ ЭКОЛОГИЧЕСКОЙ БЕЗОПАСНОСТИ ГОРОДСКОЙ СРЕДЫ</span></b></a><br><font color="#00008f"><i>Глинянова И.Ю., Азаров В.Н., Городничая А.Н., Мельченко А.И., Фомичев В.Т.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=36545573">Социология города</a>. 
+2018. 
+<a href="https://elibrary.ru/contents.asp?id=36545573&amp;selid=36545578">№&nbsp;3</a>.  С. 83-93.
+
+</font></td><td valign="middle" align="center">21</td></tr>
+
+
+<tr id="a35214926" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>23</b></font><br><input type="checkbox" name="tid35214926" id="tid35214926" onclick="if (this.checked) {RowSelect(a35214926,1)} else {RowSelect(a35214926,0)}"><div id="pdf_35214926" name="pdf_35214926"><a href="javascript:load_article(35214926)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=35214926"><b><span style="line-height:1.0;">ВЛИЯНИЕ ОРГАНИЗАЦИОННО-ТЕХНОЛОГИЧЕСКИХ РЕШЕНИЙ СТРОИТЕЛЬСТВА В СТЕСНЕННЫХ ГОРОДСКИХ УСЛОВИЯХ НА ОКРУЖАЮЩУЮ СРЕДУ</span></b></a><br><font color="#00008f"><i>Чебанова С.А., Азаров В.Н., Азаров А.В., Поляков В.Г.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=35214747">Инженерный вестник Дона</a>. 
+2018. 
+<a href="https://elibrary.ru/contents.asp?id=35214747&amp;selid=35214926">№&nbsp;1&nbsp;(48)</a>.  С. 178.
+
+</font></td><td valign="middle" align="center">21</td></tr>
+
+
+<tr id="a23602281" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>24</b></font><br><input type="checkbox" name="tid23602281" id="tid23602281" onclick="if (this.checked) {RowSelect(a23602281,1)} else {RowSelect(a23602281,0)}"><div id="pdf_23602281" name="pdf_23602281"><a href="javascript:load_article(23602281)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=23602281"><b><span style="line-height:1.0;">ЗАГРЯЗНЕННОСТЬ СТРОИТЕЛЬНЫХ КОНСТРУКЦИЙ И ПАМЯТНИКОВ АРХИТЕКТУРЫ КАК ОДИН ИЗ АСПЕКТОВ ВИЗУАЛЬНОЙ ЭКОЛОГИИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Кузьмичев А.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34076275">Социология города</a>. 
+2015. 
+<a href="https://elibrary.ru/contents.asp?id=34076275&amp;selid=23602281">№&nbsp;2</a>.  С. 76-86.
+
+</font></td><td valign="middle" align="center">21</td></tr>
+
+
+<tr id="a17855638" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>25</b></font><br><input type="checkbox" name="tid17855638" id="tid17855638" onclick="if (this.checked) {RowSelect(a17855638,1)} else {RowSelect(a17855638,0)}"><div id="pdf_17855638" name="pdf_17855638"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=17855638"><b><span style="line-height:1.0;">ПРИМЕНЕНИЕ ЗАКРУТКИ ПОТОКА В СИСТЕМАХ АСПИРАЦИИ НА ПРЕДПРИЯТИЯХ СТРОИТЕЛЬНОЙ ИНДУСТРИИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Боровков Д.П.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33743789">Строительные материалы</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=33743789&amp;selid=17855638">№&nbsp;5</a>.  С. 65-67.
+
+</font></td><td valign="middle" align="center">21</td></tr>
+
+
+<tr id="a38055129" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>26</b></font><br><input type="checkbox" name="tid38055129" id="tid38055129" onclick="if (this.checked) {RowSelect(a38055129,1)} else {RowSelect(a38055129,0)}"><div id="pdf_38055129" name="pdf_38055129"><a href="javascript:order_item(38055129, 250)"><img src="1_files/download_yellow.png" title="Можно приобрести полный текст этой публикации за 250 руб." width="16" vspace="3" border="0"></a></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=38055129"><b><span style="line-height:1.0;">СОВЕРШЕНСТВОВАНИЕ СИСТЕМЫ ЭКОЛОГИЧЕСКОЙ БЕЗОПАСНОСТИ ГОРОДСКОЙ СРЕДЫ: ПРАКТИЧЕСКИЙ ОПЫТ ИСПОЛЬЗОВАНИЯ ФИТОМОДУЛЯРНОГО ПОКАЗАТЕЛЯ</span></b></a><br><font color="#00008f"><i>Глинянова И.Ю., Городничая А.Н., Азаров В.Н., Фомичев В.Т., Мельченко А.И.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=38055128">Экология урбанизированных территорий</a>. 
+2019. 
+<a href="https://elibrary.ru/contents.asp?id=38055128&amp;selid=38055129">№&nbsp;1</a>.  С. 6-10.
+
+</font></td><td valign="middle" align="center">20</td></tr>
+
+
+<tr id="a32685944" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>27</b></font><br><input type="checkbox" name="tid32685944" id="tid32685944" onclick="if (this.checked) {RowSelect(a32685944,1)} else {RowSelect(a32685944,0)}"><div id="pdf_32685944" name="pdf_32685944"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=32685944"><b><span style="line-height:1.0;">ДИСПЕРСНЫЙ СОСТАВ ПЫЛИ КАК СЛУЧАЙНАЯ ФУНКЦИЯ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Азаров Д.В., Гробов А.Б., Юръкян В.Ю.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33942031">Объединенный научный журнал</a>. 
+2003. 
+<a href="https://elibrary.ru/contents.asp?id=33942031&amp;selid=32685944">№&nbsp;6</a>.  С. 51-53.
+
+</font></td><td valign="middle" align="center">20</td></tr>
+
+
+<tr id="a32677995" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>28</b></font><br><input type="checkbox" name="tid32677995" id="tid32677995" onclick="if (this.checked) {RowSelect(a32677995,1)} else {RowSelect(a32677995,0)}"><div id="pdf_32677995" name="pdf_32677995"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=32677995"><b><span style="line-height:1.0;">ПРИМЕНЕНИЕ ЗАКРУЧЕННЫХ ПОТОКОВ В СИСТЕМАХ АСПИРАЦИИ СТРОИТЕЛЬНОЙ ОТРАСЛИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Боровков Д.П.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34838803">Объединенный научный журнал</a>. 
+2003. 
+<a href="https://elibrary.ru/contents.asp?id=34838803&amp;selid=32677995">№&nbsp;5</a>.  С. 102-104.
+
+</font></td><td valign="middle" align="center">20</td></tr>
+
+
+<tr id="a21928672" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>29</b></font><br><input type="checkbox" name="tid21928672" id="tid21928672" onclick="if (this.checked) {RowSelect(a21928672,1)} else {RowSelect(a21928672,0)}"><div id="pdf_21928672" name="pdf_21928672"><img src="1_files/download_orange.png" title="Доступ к полному тексту закрыт" width="16" vspace="3" border="0">
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=21928672"><b><span style="line-height:1.0;">QUALITY MANAGEMENT IMPLEMENTATION IN RUSSIA: STRATEGIES FOR CHANGE</span></b></a><br><font color="#00008f"><i>Dickenson R.P., Campbell D.R., Azarov V.N.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33120656">International Journal of Quality &amp; Reliability Management</a>. 
+2000. 
+Т. 17. <a href="https://elibrary.ru/contents.asp?id=33120656&amp;selid=21928672">№&nbsp;1</a>.  С. 66-81.
+
+</font></td><td valign="middle" align="center">20</td></tr>
+
+
+<tr id="a37052794" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>30</b></font><br><input type="checkbox" name="tid37052794" id="tid37052794" onclick="if (this.checked) {RowSelect(a37052794,1)} else {RowSelect(a37052794,0)}"><div id="pdf_37052794" name="pdf_37052794"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=37052794"><b><span style="line-height:1.0;">DUST COLLECTING SYSTEM FOR THE CLEANING OF ATMOSPHERIC VENTILATION EMISSIONS</span></b></a><br><font color="#00008f"><i>Stefanenko I.V., Azarov V.N., Sergina N.M.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34841855">Applied Mechanics and Materials</a>. 
+2018. 
+Т. 878.  С. 269-272.
+
+</font></td><td valign="middle" align="center">19</td></tr>
+
+
+<tr id="a35686309" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>31</b></font><br><input type="checkbox" name="tid35686309" id="tid35686309" onclick="if (this.checked) {RowSelect(a35686309,1)} else {RowSelect(a35686309,0)}"><div id="pdf_35686309" name="pdf_35686309"><a href="javascript:load_article(35686309)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=35686309"><b><span style="line-height:1.0;">О СОВЕРШЕНСТВОВАНИИ АЛГОРИТМА КОМПЬЮТЕРНОЙ ПРОГРАММЫ АНАЛИЗА ДИСПЕРСНОГО СОСТАВА ПЫЛИ В ВОЗДУШНОЙ СРЕДЕ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Ребров В.А., Козловцева Е.Ю., Азаров А.В., Добринский Д.Р., Тертишников И.В., Поляков И.В., Абухба Б.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=35686217">Инженерный вестник Дона</a>. 
+2018. 
+<a href="https://elibrary.ru/contents.asp?id=35686217&amp;selid=35686309">№&nbsp;2&nbsp;(49)</a>.  С. 92.
+
+</font></td><td valign="middle" align="center">19</td></tr>
+
+
+<tr id="a12937178" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>32</b></font><br><input type="checkbox" name="tid12937178" id="tid12937178" onclick="if (this.checked) {RowSelect(a12937178,1)} else {RowSelect(a12937178,0)}"><div id="pdf_12937178" name="pdf_12937178"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=12937178"><b><span style="line-height:1.0;">О ДИСПЕРСНОМ СОСТАВЕ ПЫЛИ В СИСТЕМАХ ОБЕСПЫЛИВАЮЩЕЙ ВЕНТИЛЯЦИИ СТРОИТЕЛЬНЫХ ПРОИЗВОДСТВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Есина Е.Ю.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33383146">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2008. 
+<a href="https://elibrary.ru/contents.asp?id=33383146&amp;selid=12937178">№&nbsp;11&nbsp;(30)</a>.  С. 119-122.
+
+</font></td><td valign="middle" align="center">19</td></tr>
+
+
+<tr id="a25797377" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>33</b></font><br><input type="checkbox" name="tid25797377" id="tid25797377" onclick="if (this.checked) {RowSelect(a25797377,1)} else {RowSelect(a25797377,0)}"><div id="pdf_25797377" name="pdf_25797377"><a href="javascript:load_article(25797377)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=25797377"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЕ
+ ВЛИЯНИЯ ЗАГРЯЗНЕНИЯ АТМОСФЕРНОГО ВОЗДУХА НА ВНЕШНИЙ ОБЛИК И ВОСПРИЯТИЕ 
+СТРОИТЕЛЬНЫХ КОНСТРУКЦИЙ И ПАМЯТНИКОВ АРХИТЕКТУРЫ</span></b></a><br><font color="#00008f"><i>Кузьмичев А.А., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34229457">Биосферная совместимость: человек, регион, технологии</a>. 
+2016. 
+<a href="https://elibrary.ru/contents.asp?id=34229457&amp;selid=25797377">№&nbsp;1&nbsp;(13)</a>.  С. 86-96.
+
+</font></td><td valign="middle" align="center">17</td></tr>
+
+
+<tr id="a20229516" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>34</b></font><br><input type="checkbox" name="tid20229516" id="tid20229516" onclick="if (this.checked) {RowSelect(a20229516,1)} else {RowSelect(a20229516,0)}"><div id="pdf_20229516" name="pdf_20229516"><a href="javascript:load_article(20229516)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=20229516"><b><span style="line-height:1.0;">КОНЦЕПЦИИ
+ БИОСФЕРНОЙ СОВМЕСТИМОСТИ И ЭКОЛОГИЧЕСКОГО СЛЕДА И ИХ РОЛЬ В ДОСТИЖЕНИИ 
+ЭКОЛОГИЧЕСКИ УСТОЙЧИВОГО РАЗВИТИЯ УРБАНИЗИРОВАННЫХ ТЕРРИТОРИЙ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Донцова Т.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33844588">Социология города</a>. 
+2013. 
+<a href="https://elibrary.ru/contents.asp?id=33844588&amp;selid=20229516">№&nbsp;1</a>.  С. 39-45.
+
+</font></td><td valign="middle" align="center">17</td></tr>
+
+
+<tr id="a20229510" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>35</b></font><br><input type="checkbox" name="tid20229510" id="tid20229510" onclick="if (this.checked) {RowSelect(a20229510,1)} else {RowSelect(a20229510,0)}"><div id="pdf_20229510" name="pdf_20229510"><a href="javascript:load_article(20229510)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=20229510"><b><span style="line-height:1.0;">СТРОИТЕЛЬНАЯ ОТРАСЛЬ ЭКОНОМИКИ И АТМОСФЕРНЫЙ ВОЗДУХ ИНДУСТРИАЛЬНЫХ ГОРОДОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Горшков Е.В., Саркисов Р.М.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33844587">Социология города</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=33844587&amp;selid=20229510">№&nbsp;4</a>.  С. 71-78.
+
+</font></td><td valign="middle" align="center">17</td></tr>
+
+
+<tr id="a37027638" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>36</b></font><br><input type="checkbox" name="tid37027638" id="tid37027638" onclick="if (this.checked) {RowSelect(a37027638,1)} else {RowSelect(a37027638,0)}"><div id="pdf_37027638" name="pdf_37027638"><a href="javascript:order_item(37027638, 250)"><img src="1_files/download_yellow.png" title="Можно приобрести полный текст этой публикации за 250 руб." width="16" vspace="3" border="0"></a></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=37027638"><b><span style="line-height:1.0;">О ВОЗМОЖНОСТИ ФИТОМОНИТОРИНГА РАДИОАКТИВНЫХ ВЕЩЕСТВ (<sup>90</sup>SR) НА СТАДИИ ПРЕДПРОЕКТНОЙ ПОДГОТОВКИ СТРОИТЕЛЬСТВА</span></b></a><br><font color="#00008f"><i>Городничая А.Н., Глинянова И.Ю., Азаров В.Н., Мельченко А.И.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=37027631">Экология урбанизированных территорий</a>. 
+2018. 
+<a href="https://elibrary.ru/contents.asp?id=37027631&amp;selid=37027638">№&nbsp;4</a>.  С. 46-50.
+
+</font></td><td valign="middle" align="center">16</td></tr>
+
+
+<tr id="a36654926" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>37</b></font><br><input type="checkbox" name="tid36654926" id="tid36654926" onclick="if (this.checked) {RowSelect(a36654926,1)} else {RowSelect(a36654926,0)}"><div id="pdf_36654926" name="pdf_36654926"><a href="javascript:load_article(36654926)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=36654926"><b><span style="line-height:1.0;">МЕЛКОДИСПЕРСНАЯ ПЫЛЬ КАК ФАКТОР ЗАГРЯЗНЕНИЯ АТМОСФЕРНОГО ВОЗДУХА</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Горшков Е.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=36654925">Социология города</a>. 
+2018. 
+<a href="https://elibrary.ru/contents.asp?id=36654925&amp;selid=36654926">№&nbsp;4</a>.  С. 5-14.
+
+</font></td><td valign="middle" align="center">16</td></tr>
+
+
+<tr id="a27533325" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>38</b></font><br><input type="checkbox" name="tid27533325" id="tid27533325" onclick="if (this.checked) {RowSelect(a27533325,1)} else {RowSelect(a27533325,0)}"><div id="pdf_27533325" name="pdf_27533325"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=27533325"><b><span style="line-height:1.0;">MAIN TRENDS OF DUST CONDITIONS NORMALIZING AT CEMENT MANUFACTURING PLANTS</span></b></a><br><font color="#00008f"><i>Menzelintseva N.V., Azarov V.N., Karapuzova N.Yu., Redvan A.M.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34340099">International Review of Civil Engineering</a>. 
+2015. 
+Т. 5. <a href="https://elibrary.ru/contents.asp?id=34340099&amp;selid=27533325">№&nbsp;5</a>.  С. 145-150.
+
+</font></td><td valign="middle" align="center">16</td></tr>
+
+
+<tr id="a26468928" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>39</b></font><br><input type="checkbox" name="tid26468928" id="tid26468928" onclick="if (this.checked) {RowSelect(a26468928,1)} else {RowSelect(a26468928,0)}"><div id="pdf_26468928" name="pdf_26468928"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=26468928"><b><span style="line-height:1.0;">ОЧИСТНЫЕ СООРУЖЕНИЯ КАК ИСТОЧНИК НЕПРИЯТНОГО ЗАПАХА: ПРИЧИНЫ, ХАРАКТЕРИСТИКИ И МЕТОДЫ БОРЬБЫ</span></b></a><br><font color="#00008f"><i>Свицков С.В., Данилович Д.А., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34255058">Водоснабжение и санитарная техника</a>. 
+2016. 
+<a href="https://elibrary.ru/contents.asp?id=34255058&amp;selid=26468928">№&nbsp;7</a>.  С. 24-32.
+
+</font></td><td valign="middle" align="center">15</td></tr>
+
+
+<tr id="a28498824" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>40</b></font><br><input type="checkbox" name="tid28498824" id="tid28498824" onclick="if (this.checked) {RowSelect(a28498824,1)} else {RowSelect(a28498824,0)}"><div id="pdf_28498824" name="pdf_28498824"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=28498824"><b><span style="line-height:1.0;">ОБ ИСПОЛЬЗОВАНИИ ЗАКРУТКИ ПОТОКА В АСПИРАЦИОННЫХ СИСТЕМАХ НА ПРЕДПРИЯТИЯХ СТРОИТЕЛЬНОЙ ИНДУСТРИИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Боровков Д.П.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34430029">Вестник центрального регионального отделения Российской академии архитектуры и строительных наук</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=34430029&amp;selid=28498824">№&nbsp;16</a>.  С. 12-17.
+
+</font></td><td valign="middle" align="center">14</td></tr>
+
+
+<tr id="a25599997" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>41</b></font><br><input type="checkbox" name="tid25599997" id="tid25599997" onclick="if (this.checked) {RowSelect(a25599997,1)} else {RowSelect(a25599997,0)}"><div id="pdf_25599997" name="pdf_25599997"><a href="javascript:load_article(25599997)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=25599997"><b><span style="line-height:1.0;">ОСНОВЫ БАЛАНСОВОГО МЕТОДА ОЦЕНКИ ПОСТУПЛЕНИЯ ВРЕДНЫХ ВЕЩЕСТВ В РАЙОН КРУПНОГО ГОРОДА В РАМКАХ КОНЦЕПЦИИ БИОСФЕРНОЙ СОВМЕСТИМОСТИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Донцова Т.В., Хегай Д.С.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34221945">Биосферная совместимость: человек, регион, технологии</a>. 
+2015. 
+<a href="https://elibrary.ru/contents.asp?id=34221945&amp;selid=25599997">№&nbsp;4&nbsp;(12)</a>.  С. 10-19.
+
+</font></td><td valign="middle" align="center">14</td></tr>
+
+
+<tr id="a21262412" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>42</b></font><br><input type="checkbox" name="tid21262412" id="tid21262412" onclick="if (this.checked) {RowSelect(a21262412,1)} else {RowSelect(a21262412,0)}"><div id="pdf_21262412" name="pdf_21262412"><a href="javascript:load_article(21262412)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=21262412"><b><span style="line-height:1.0;">ОБЕСПЕЧЕНИЕ БЕЗОПАСНОСТИ ВОЗДУШНОЙ СРЕДЫ ПОМЕЩЕНИЙ ПО ПРОИЗВОДСТВУ ДЕРЕВЯННЫХ СТРОИТЕЛЬНЫХ КОНСТРУКЦИЙ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Сидякин П.А., Экба С.И., Семенова Е.А., Боровков Д.П.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33946209">Интернет-вестник ВолгГАСУ</a>. 
+2013. 
+<a href="https://elibrary.ru/contents.asp?id=33946209&amp;selid=21262412">№&nbsp;2&nbsp;(27)</a>.  С. 35.
+
+</font></td><td valign="middle" align="center">14</td></tr>
+
+
+<tr id="a9558021" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>43</b></font><br><input type="checkbox" name="tid9558021" id="tid9558021" onclick="if (this.checked) {RowSelect(a9558021,1)} else {RowSelect(a9558021,0)}"><div id="pdf_9558021" name="pdf_9558021"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=9558021"><b><span style="line-height:1.0;">СИСТЕМЫ АСПИРАЦИИ ДЫМОВЫХ И ЛЕТОЧНЫХ ГАЗОВ ПРОИЗВОДСТВА КАРБИДА КАЛЬЦИЯ</span></b></a><br><font color="#00008f"><i>Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33188439">Строительные материалы</a>. 
+2002. 
+<a href="https://elibrary.ru/contents.asp?id=33188439&amp;selid=9558021">№&nbsp;11</a>.  С. 20-21.
+
+</font></td><td valign="middle" align="center">14</td></tr>
+
+
+<tr id="a42691522" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>44</b></font><br><input type="checkbox" name="tid42691522" id="tid42691522" onclick="if (this.checked) {RowSelect(a42691522,1)} else {RowSelect(a42691522,0)}"><div id="pdf_42691522" name="pdf_42691522"><a href="javascript:load_article(42691522)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=42691522"><b><span style="line-height:1.0;">ВЛИЯНИЕ МЕТЕОРОЛОГИЧЕСКИХ УСЛОВИЙ НА РАССЕИВАНИЕ ВРЕДНЫХ ВЫБРОСОВ В ГОРОДСКОЙ СРЕДЕ</span></b></a><br><font color="#00008f"><i>Иванова Ю.П., Надер Б.Ю., Мишаков В.А., Шаповалова Ю.А., Иванова О.О., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=42691498">Инженерный вестник Дона</a>. 
+2020. 
+<a href="https://elibrary.ru/contents.asp?id=42691498&amp;selid=42691522">№&nbsp;1&nbsp;(61)</a>.  С. 24.
+
+</font></td><td valign="middle" align="center">13</td></tr>
+
+
+<tr id="a38652779" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>45</b></font><br><input type="checkbox" name="tid38652779" id="tid38652779" onclick="if (this.checked) {RowSelect(a38652779,1)} else {RowSelect(a38652779,0)}"><div id="pdf_38652779" name="pdf_38652779"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=38652779"><b><span style="line-height:1.0;">MONITORING OF FINE DUST POLLUTION OF URBAN AIR NEARBY HIGHWAYS</span></b></a><br><font color="#00008f"><i>Azarov V.N., Stefanenko I.V., Karapuzova N.Y., Kozlovtseva E.Y., Nikolenko D.A.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=37111229">International Review of Mechanical Engineering</a>. 
+2018. 
+Т. 12. <a href="https://elibrary.ru/contents.asp?id=37111229&amp;selid=38652779">№&nbsp;8</a>.  С. 657-662.
+
+</font></td><td valign="middle" align="center">13</td></tr>
+
+
+<tr id="a22843899" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>46</b></font><br><input type="checkbox" name="tid22843899" id="tid22843899" onclick="if (this.checked) {RowSelect(a22843899,1)} else {RowSelect(a22843899,0)}"><div id="pdf_22843899" name="pdf_22843899"><a href="javascript:load_article(22843899)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=22843899"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЕ
+ ОСНОВНЫХ ПОКАЗАТЕЛЕЙ ВЫБРОСОВ ПЫЛИ АСБЕСТОЦЕМЕНТА В АТМОСФЕРНЫЙ ВОЗДУХ 
+ДЛЯ ОЦЕНКИ ИХ ВЛИЯНИЯНА КАЧЕСТВО ЖИЗНИ РАБОТАЮЩИХ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Кошкарев С.А., Николенко М.А., Бурханова Р.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34046670">Инженерный вестник Дона</a>. 
+2014. 
+<a href="https://elibrary.ru/contents.asp?id=34046670&amp;selid=22843899">№&nbsp;3&nbsp;(30)</a>.  С. 51.
+
+</font></td><td valign="middle" align="center">13</td></tr>
+
+
+<tr id="a21323057" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>47</b></font><br><input type="checkbox" name="tid21323057" id="tid21323057" onclick="if (this.checked) {RowSelect(a21323057,1)} else {RowSelect(a21323057,0)}"><div id="pdf_21323057" name="pdf_21323057"><a href="javascript:load_article(21323057)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=21323057"><b><span style="line-height:1.0;">О БАЛАНСАХ ВРЕДНЫХ ВЕЩЕСТВ В АТМОСФЕРЕ КРУПНЫХ ГОРОДОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Донцова Т.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33948884">Интернет-вестник ВолгГАСУ</a>. 
+2014. 
+<a href="https://elibrary.ru/contents.asp?id=33948884&amp;selid=21323057">№&nbsp;1&nbsp;(31)</a>.  С. 12.
+
+</font></td><td valign="middle" align="center">13</td></tr>
+
+
+<tr id="a18061662" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>48</b></font><br><input type="checkbox" name="tid18061662" id="tid18061662" onclick="if (this.checked) {RowSelect(a18061662,1)} else {RowSelect(a18061662,0)}"><div id="pdf_18061662" name="pdf_18061662"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=18061662"><b><span style="line-height:1.0;">БИОСФЕРНАЯ СОВМЕСТИМОСТЬ. ТЕХНОЛОГИИ ВНЕДРЕНИЯ ИННОВАЦИЙ. ГОРОДА, РАЗВИВАЮЩИЕ ЧЕЛОВЕКА</span></b></a><br><font color="#00008f"><i>Егорушкин В.А., Городков А.В., Федоров В.С., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33758957">Промышленное и гражданское строительство</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=33758957&amp;selid=18061662">№&nbsp;10</a>.  С. 71-72.
+
+</font></td><td valign="middle" align="center">13</td></tr>
+
+
+<tr id="a37012380" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>49</b></font><br><input type="checkbox" name="tid37012380" id="tid37012380" onclick="if (this.checked) {RowSelect(a37012380,1)} else {RowSelect(a37012380,0)}"><div id="pdf_37012380" name="pdf_37012380"><a href="javascript:load_article(37012380)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=37012380"><b><span style="line-height:1.0;">ЭКОЛОГИЧЕСКИЕ ТРЕБОВАНИЯ ПРИ ПРОЕКТИРОВАНИИ И СТРОИТЕЛЬСТВЕ ОБЪЕКТОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Манжилевская С.Е., Коваль Н.В., Симерникова А.Д.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=37012306">Вестник евразийской науки</a>. 
+2018. 
+Т. 10. <a href="https://elibrary.ru/contents.asp?id=37012306&amp;selid=37012380">№&nbsp;6</a>.  С. 57.
+
+</font></td><td valign="middle" align="center">12</td></tr>
+
+
+<tr id="a27012859" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>50</b></font><br><input type="checkbox" name="tid27012859" id="tid27012859" onclick="if (this.checked) {RowSelect(a27012859,1)} else {RowSelect(a27012859,0)}"><div id="pdf_27012859" name="pdf_27012859"><a href="javascript:load_article(27012859)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=27012859"><b><span style="line-height:1.0;">СОВОКУПНОСТЬ ФИЗИЧЕСКОГО И ВИЗУАЛЬНОГО АСПЕКТОВ ПРИ ИССЛЕДОВАНИИ ЗАГРЯЗНЕНИЙ СТРОИТЕЛЬНЫХ КОНСТРУКЦИЙ И ПАМЯТНИКОВ АРХИТЕКТУРЫ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Кузьмичев А.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34308324">Социология города</a>. 
+2016. 
+<a href="https://elibrary.ru/contents.asp?id=34308324&amp;selid=27012859">№&nbsp;3</a>.  С. 28-42.
+
+</font></td><td valign="middle" align="center">12</td></tr>
+
+
+<tr id="a26406144" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>51</b></font><br><input type="checkbox" name="tid26406144" id="tid26406144" onclick="if (this.checked) {RowSelect(a26406144,1)} else {RowSelect(a26406144,0)}"><div id="pdf_26406144" name="pdf_26406144"><a href="javascript:load_article(26406144)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=26406144"><b><span style="line-height:1.0;">МАТЕМАТИЧЕСКАЯ МОДЕЛЬ ПРОГНОЗА ДИСПЕРСНОГО СОСТАВА ПЫЛИ В ВОЗДУХЕ РАБОЧИХ ЗОН ЦЕМЕНТНЫХ ЗАВОДОВ ПРИ ОЦЕНКЕ ПЫЛЕВОЙ ОБСТАНОВКИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Мензелинцева Н.В., Карапузова Н.Ю., Фомина Е.О., Пшеничкина Н.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34252957">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2016. 
+<a href="https://elibrary.ru/contents.asp?id=34252957&amp;selid=26406144">№&nbsp;44-2&nbsp;(63)</a>.  С. 134-144.
+
+</font></td><td valign="middle" align="center">12</td></tr>
+
+
+<tr id="a17926816" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>52</b></font><br><input type="checkbox" name="tid17926816" id="tid17926816" onclick="if (this.checked) {RowSelect(a17926816,1)} else {RowSelect(a17926816,0)}"><div id="pdf_17926816" name="pdf_17926816"><a href="javascript:load_article(17926816)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=17926816"><b><span style="line-height:1.0;">О ТРАНСПОРТИРОВАНИИ ПЫЛЕВЫХ ЧАСТИЦ ЗАКРУЧЕННЫМИ ПОТОКАМИ В ВОЗДУХОВОДАХ СИСТЕМ АСПИРАЦИИ И ОБЕСПЫЛИВАЮЩЕЙ ВЕНТИЛЯЦИИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Боровков Д.П., Филиппова С.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33746392">Известия Юго-Западного государственного университета</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=33746392&amp;selid=17926816">№&nbsp;3-1&nbsp;(42)</a>.  С. 113-119.
+
+</font></td><td valign="middle" align="center">12</td></tr>
+
+
+<tr id="a16316659" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>53</b></font><br><input type="checkbox" name="tid16316659" id="tid16316659" onclick="if (this.checked) {RowSelect(a16316659,1)} else {RowSelect(a16316659,0)}"><div id="pdf_16316659" name="pdf_16316659"><a href="javascript:load_article(16316659)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=16316659"><b><span style="line-height:1.0;">АНАЛИЗ ПЫЛИ, ПОСТУПАЮЩЕЙ В АТМОСФЕРУ, ПРИ РАЗРАБОТКЕ ГРУНТА БУЛЬДОЗЕРНО-РЫХЛИТЕЛЬНЫМ ОБОРУДОВАНИЕМ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Новиков В.С., Маринин Н.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33660007">Интернет-вестник ВолгГАСУ</a>. 
+2011. 
+<a href="https://elibrary.ru/contents.asp?id=33660007&amp;selid=16316659">№&nbsp;2&nbsp;(16)</a>.  С. 6.
+
+</font></td><td valign="middle" align="center">12</td></tr>
+
+
+<tr id="a26436187" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>54</b></font><br><input type="checkbox" name="tid26436187" id="tid26436187" onclick="if (this.checked) {RowSelect(a26436187,1)} else {RowSelect(a26436187,0)}"><div id="pdf_26436187" name="pdf_26436187"><a href="javascript:load_article(26436187)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=26436187"><b><span style="line-height:1.0;">СОВРЕМЕННЫЕ ТЕНДЕНЦИИ ЭЛЕКТРОННО-ДИСТАНЦИОННЫХ ОБРАЗОВАТЕЛЬНЫХ СРЕД:КЛАССИФИКАЦИЯ, ТРЕБОВАНИЯ, СОСТАВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Грауле Г.А., Добров А.О., Мизгинова М.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34253917">Качество. Инновации. Образование</a>. 
+2016. 
+<a href="https://elibrary.ru/contents.asp?id=34253917&amp;selid=26436187">№&nbsp;4&nbsp;(131)</a>.  С. 9-17.
+
+</font></td><td valign="middle" align="center">11</td></tr>
+
+
+<tr id="a21378011" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>55</b></font><br><input type="checkbox" name="tid21378011" id="tid21378011" onclick="if (this.checked) {RowSelect(a21378011,1)} else {RowSelect(a21378011,0)}"><div id="pdf_21378011" name="pdf_21378011"><a href="javascript:order_item(21378011, 100)"><img src="1_files/download_yellow.png" title="Можно приобрести полный текст этой публикации за 100 руб." width="16" vspace="3" border="0"></a></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=21378011"><b><span style="line-height:1.0;">ВОПРОСЫ ОГРАНИЧЕНИЯ ШУМА ДЛЯ ОЦЕНКИ УСЛОВИЙ ТРУДА</span></b></a><br><font color="#00008f"><i>Готлиб Я.Г., Алимов Н.П., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33952095">Международный научный журнал Альтернативная энергетика и экология</a>. 
+2013. 
+<a href="https://elibrary.ru/contents.asp?id=33952095&amp;selid=21378011">№&nbsp;13&nbsp;(135)</a>.  С. 70-83.
+
+</font></td><td valign="middle" align="center">11</td></tr>
+
+
+<tr id="a21300097" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>56</b></font><br><input type="checkbox" name="tid21300097" id="tid21300097" onclick="if (this.checked) {RowSelect(a21300097,1)} else {RowSelect(a21300097,0)}"><div id="pdf_21300097" name="pdf_21300097"><a href="javascript:load_article(21300097)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=21300097"><b><span style="line-height:1.0;">ОБ ИССЛЕДОВАНИИ АЭРОДИНАМИЧЕСКИХ ХАРАКТЕРИСТИК ПЫЛИ ЗОЛЫ В ВОЗДУХЕ ГОРОДОВ</span></b></a><br><font color="#00008f"><i>Чебанова С.А., Азаров В.Н., Маринин Н.А., Воробьев В.И.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33947866">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2014. 
+<a href="https://elibrary.ru/contents.asp?id=33947866&amp;selid=21300097">№&nbsp;35&nbsp;(54)</a>.  С. 207-211.
+
+</font></td><td valign="middle" align="center">11</td></tr>
+
+
+<tr id="a20937372" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>57</b></font><br><input type="checkbox" name="tid20937372" id="tid20937372" onclick="if (this.checked) {RowSelect(a20937372,1)} else {RowSelect(a20937372,0)}"><div id="pdf_20937372" name="pdf_20937372"><a href="javascript:order_item(20937372, 100)"><img src="1_files/download_yellow.png" title="Можно приобрести полный текст этой публикации за 100 руб." width="16" vspace="3" border="0"></a></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=20937372"><b><span style="line-height:1.0;">О МОДЕЛИРОВАНИИ ДИНАМИКИ ПЕРЕНОСА ПРИМЕСЕЙ В АТМОСФЕРЕ ГОРОДОВ</span></b></a><br><font color="#00008f"><i>Донцова Т.В., Храпов С.С., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33926912">Международный научный журнал Альтернативная энергетика и экология</a>. 
+2013. 
+<a href="https://elibrary.ru/contents.asp?id=33926912&amp;selid=20937372">№&nbsp;12&nbsp;(134)</a>.  С. 67-72.
+
+</font></td><td valign="middle" align="center">11</td></tr>
+
+
+<tr id="a20280929" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>58</b></font><br><input type="checkbox" name="tid20280929" id="tid20280929" onclick="if (this.checked) {RowSelect(a20280929,1)} else {RowSelect(a20280929,0)}"><div id="pdf_20280929" name="pdf_20280929"><a href="javascript:load_article(20280929)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=20280929"><b><span style="line-height:1.0;">УЧЕТ ПЫЛЕВОГО ЗАГРЯЗНЕНИЯ АТМОСФЕРНОГО ВОЗДУХА ПРИ РАЗМЕЩЕНИИ И ОРГАНИЗАЦИИ ОБЪЕКТОВ ГОРОДСКОЙ СРЕДЫ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Барикаева Н.С.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33846359">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=33846359&amp;selid=20280929">№&nbsp;29&nbsp;(48)</a>.  С. 213-217.
+
+</font></td><td valign="middle" align="center">11</td></tr>
+
+
+<tr id="a18000260" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>59</b></font><br><input type="checkbox" name="tid18000260" id="tid18000260" onclick="if (this.checked) {RowSelect(a18000260,1)} else {RowSelect(a18000260,0)}"><div id="pdf_18000260" name="pdf_18000260"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=18000260"><b><span style="line-height:1.0;">О ДИСПЕРСНОМ СОСТАВЕ ПЫЛИ В СИСТЕМАХ АСПИРАЦИИ И ПНЕВМОУБОРКИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Богомолов А.Н., Сергина Н.М., Маринин Н.А., Чижов Н.И.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33753232">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2011. 
+<a href="https://elibrary.ru/contents.asp?id=33753232&amp;selid=18000260">№&nbsp;25&nbsp;(44)</a>.  С. 218-223.
+
+</font></td><td valign="middle" align="center">11</td></tr>
+
+
+<tr id="a30322756" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>60</b></font><br><input type="checkbox" name="tid30322756" id="tid30322756" onclick="if (this.checked) {RowSelect(a30322756,1)} else {RowSelect(a30322756,0)}"><div id="pdf_30322756" name="pdf_30322756"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=30322756"><b><span style="line-height:1.0;">РИСКИ И УГРОЗЫ В ПРОЦЕССАХ ТРАНСПОРТНОЙ БЕЗОПАСНОСТИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Кабанов А.С., Артёменко А.Е., Моргунов М.Ю.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34541189">Качество. Инновации. Образование</a>. 
+2017. 
+<a href="https://elibrary.ru/contents.asp?id=34541189&amp;selid=30322756">№&nbsp;8&nbsp;(147)</a>.  С. 57-69.
+
+</font></td><td valign="middle" align="center">10</td></tr>
+
+
+<tr id="a23282424" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>61</b></font><br><input type="checkbox" name="tid23282424" id="tid23282424" onclick="if (this.checked) {RowSelect(a23282424,1)} else {RowSelect(a23282424,0)}"><div id="pdf_23282424" name="pdf_23282424"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=23282424"><b><span style="line-height:1.0;">К
+ ЭКСПЕРИМЕНТАЛЬНОЙ ОЦЕНКЕ ЭФФЕКТИВНОСТИ АППАРАТА МОКРОЙ ОЧИСТКИ В 
+СИСТЕМАХ ОБЕСПЫЛИВАНИЯ ВЫБРОСОВ В АТМОСФЕРУ ОТ ПЕЧЕЙ ОБЖИГА КЕРАМЗИТА</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Кошкарев С.А., Соломахина Л.Я.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34064593">Инженерный вестник Дона</a>. 
+2014. 
+<a href="https://elibrary.ru/contents.asp?id=34064593&amp;selid=23282424">№&nbsp;4-1&nbsp;(31)</a>.  С. 26.
+
+</font></td><td valign="middle" align="center">10</td></tr>
+
+
+<tr id="a18854328" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>62</b></font><br><input type="checkbox" name="tid18854328" id="tid18854328" onclick="if (this.checked) {RowSelect(a18854328,1)} else {RowSelect(a18854328,0)}"><div id="pdf_18854328" name="pdf_18854328"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=18854328"><b><span style="line-height:1.0;">ОБ ИССЛЕДОВАНИИ АЭРОДИНАМИЧЕСКИХ ХАРАКТЕРИСТИК АСБЕСТОЦЕМЕНТНОЙ ПЫЛИ В ВЫБРОСАХ В АТМОСФЕРУ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Бурлаченко О.В., Бурханова Р.А., Маринин Н.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33821014">Интернет-вестник ВолгГАСУ</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=33821014&amp;selid=18854328">№&nbsp;1&nbsp;(20)</a>.  С. 17.
+
+</font></td><td valign="middle" align="center">10</td></tr>
+
+
+<tr id="a32625002" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>63</b></font><br><input type="checkbox" name="tid32625002" id="tid32625002" onclick="if (this.checked) {RowSelect(a32625002,1)} else {RowSelect(a32625002,0)}"><div id="pdf_32625002" name="pdf_32625002"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=32625002"><b><span style="line-height:1.0;">ОЦЕНКА КОНЦЕНТРАЦИИ И ДИСПЕРСНОГО СОСТАВА ПЫЛИ В ВОЗДУХЕ РАБОЧИХ И ОБСЛУЖИВАЕМЫХ ЗОН</span></b></a><br><font color="#00008f"><i>Богуславский Е.И., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34263109">Безопасность жизнедеятельности</a>. 
+2005. 
+<a href="https://elibrary.ru/contents.asp?id=34263109&amp;selid=32625002">№&nbsp;2</a>.  С. 46-47.
+
+</font></td><td valign="middle" align="center">9</td></tr>
+
+
+<tr id="a30767813" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>64</b></font><br><input type="checkbox" name="tid30767813" id="tid30767813" onclick="if (this.checked) {RowSelect(a30767813,1)} else {RowSelect(a30767813,0)}"><div id="pdf_30767813" name="pdf_30767813"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=30767813"><b><span style="line-height:1.0;">МЕТОДЫ СОЗДАНИЯ КОМФОРТНОЙ ВИЗУАЛЬНОЙ СРЕДЫ ГОРОДА ПРИ РЕКОНСТРУКЦИИ ИСТОРИЧЕСКИХ ЗДАНИЙ И СООРУЖЕНИЙ</span></b></a><br><font color="#00008f"><i>Кузьмичев А.А., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34552563">Социология города</a>. 
+2017. 
+<a href="https://elibrary.ru/contents.asp?id=34552563&amp;selid=30767813">№&nbsp;2</a>.  С. 44-52.
+
+</font></td><td valign="middle" align="center">9</td></tr>
+
+
+<tr id="a25624918" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>65</b></font><br><input type="checkbox" name="tid25624918" id="tid25624918" onclick="if (this.checked) {RowSelect(a25624918,1)} else {RowSelect(a25624918,0)}"><div id="pdf_25624918" name="pdf_25624918"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=25624918"><b><span style="line-height:1.0;">ИНФОРМАЦИОННЫЕ ТЕХНОЛОГИИ И МЕНЕДЖМЕНТ КАЧЕСТВА</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Гудков Ю.И.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34222915">Качество. Инновации. Образование</a>. 
+2015. 
+<a href="https://elibrary.ru/contents.asp?id=34222915&amp;selid=25624918">№&nbsp;12&nbsp;(127)</a>.  С. 3-8.
+
+</font></td><td valign="middle" align="center">9</td></tr>
+
+
+<tr id="a13088692" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>66</b></font><br><input type="checkbox" name="tid13088692" id="tid13088692" onclick="if (this.checked) {RowSelect(a13088692,1)} else {RowSelect(a13088692,0)}"><div id="pdf_13088692" name="pdf_13088692"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=13088692"><b><span style="line-height:1.0;">ТЕОРЕТИЧЕСКИЕ
+ ИССЛЕДОВАНИЯ СКОРОСТИ ОСЕДАНИЯ МЕЛКОДИСПЕРСНОЙ ПЫЛИ В ВОЗДУШНОЙ СРЕДЕ 
+РАБОЧИХ ПОМЕЩЕНИЙ ПРЕДПРИЯТИЙ МАШИНОСТРОЕНИЯ И СТРОЙИНДУСТРИИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Бессараб О.И., Кабаев О.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33389585">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2010. 
+<a href="https://elibrary.ru/contents.asp?id=33389585&amp;selid=13088692">№&nbsp;17&nbsp;(36)</a>.  С. 102-105.
+
+</font></td><td valign="middle" align="center">9</td></tr>
+
+
+<tr id="a43832907" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>67</b></font><br><input type="checkbox" name="tid43832907" id="tid43832907" onclick="if (this.checked) {RowSelect(a43832907,1)} else {RowSelect(a43832907,0)}"><div id="pdf_43832907" name="pdf_43832907"><a href="javascript:load_article(43832907)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=43832907"><b><span style="line-height:1.0;">О СОВЕРШЕНСТВОВАНИИ СИСТЕМЫ МОНИТОРИНГА ЗАГРЯЗНЕНИЯ ОКСИДОМ УГЛЕРОДА АТМОСФЕРНОГО ВОЗДУХА ЛИНЕЙНЫХ ГОРОДОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Иванова Ю.П., Подгайнова Е.Н., Юрицына И.А., Иванова О.О.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=43832881">Инженерный вестник Дона</a>. 
+2020. 
+<a href="https://elibrary.ru/contents.asp?id=43832881&amp;selid=43832907">№&nbsp;5&nbsp;(65)</a>.  С. 26.
+
+</font></td><td valign="middle" align="center">8</td></tr>
+
+
+<tr id="a42455912" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>68</b></font><br><input type="checkbox" name="tid42455912" id="tid42455912" onclick="if (this.checked) {RowSelect(a42455912,1)} else {RowSelect(a42455912,0)}"><div id="pdf_42455912" name="pdf_42455912"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=42455912"><b><span style="line-height:1.0;">AIR FLOW STRAIGHTENERS APPLICATION TO REDUCE THE POWER CONSUMPTION OF EXHAUST VENTILATION SCHEMES</span></b></a><br><font color="#00008f"><i>Azarov V.N., Sergina N.M., Stefanenko I.V.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34829161">Applied Mechanics and Materials</a>. 
+2018. 
+Т. 875.  С. 137-140.
+
+</font></td><td valign="middle" align="center">8</td></tr>
+
+
+<tr id="a42451240" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>69</b></font><br><input type="checkbox" name="tid42451240" id="tid42451240" onclick="if (this.checked) {RowSelect(a42451240,1)} else {RowSelect(a42451240,0)}"><div id="pdf_42451240" name="pdf_42451240"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=42451240"><b><span style="line-height:1.0;">ON
+ THE REGULARITIES OF THE CONCENTRATION PROFILE OF ASBESTOS-CEMENT DUST, 
+ITS PARTICLE SIZE DISTRIBUTION DEPENDING ON THE HEIGHT OF WORKING ROOM 
+AND THE METHODS OF AIR EXCHANGE ORGANIZATION</span></b></a><br><font color="#00008f"><i>Azarov V.N., Stefanenko I.V., Burkhanova R.A.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34829161">Applied Mechanics and Materials</a>. 
+2018. 
+Т. 875.  С. 187-190.
+
+</font></td><td valign="middle" align="center">8</td></tr>
+
+
+<tr id="a27286093" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>70</b></font><br><input type="checkbox" name="tid27286093" id="tid27286093" onclick="if (this.checked) {RowSelect(a27286093,1)} else {RowSelect(a27286093,0)}"><div id="pdf_27286093" name="pdf_27286093"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=27286093"><b><span style="line-height:1.0;">ОБ ОЦЕНКЕ ДОЛИ ЧАСТИЦ РМ10 И РМ 2,5 В ВЫБРОСАХ ПРЕДПРИЯТИЙ СТРОИТЕЛЬНОЙ ОТРАСЛИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Мензелинцева Н.В., Карапузова Н.Ю.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34331756">Вестник Отделения строительных наук Российской академии архитектуры и строительных наук</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=34331756&amp;selid=27286093">№&nbsp;2</a>.  С. 6-12.
+
+</font></td><td valign="middle" align="center">8</td></tr>
+
+
+<tr id="a20281011" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>71</b></font><br><input type="checkbox" name="tid20281011" id="tid20281011" onclick="if (this.checked) {RowSelect(a20281011,1)} else {RowSelect(a20281011,0)}"><div id="pdf_20281011" name="pdf_20281011"><a href="javascript:load_article(20281011)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=20281011"><b><span style="line-height:1.0;">ОСОБЕННОСТИ АСПИРАЦИИ ТЕХНОЛОГИЧЕСКОГО ОБОРУДОВАНИЯ ПРЕДПРИЯТИЙ ПО ПРОИЗВОДСТВУ ЦЕМЕНТА</span></b></a><br><font color="#00008f"><i>Мензелинцева Н.В., Азаров В.Н., Карапузова Н.Ю., Фомина Е.О., Гладков Е.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33846360">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2013. 
+<a href="https://elibrary.ru/contents.asp?id=33846360&amp;selid=20281011">№&nbsp;31-2&nbsp;(50)</a>.  С. 499-502.
+
+</font></td><td valign="middle" align="center">8</td></tr>
+
+
+<tr id="a17013190" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>72</b></font><br><input type="checkbox" name="tid17013190" id="tid17013190" onclick="if (this.checked) {RowSelect(a17013190,1)} else {RowSelect(a17013190,0)}"><div id="pdf_17013190" name="pdf_17013190"><a href="javascript:load_article(17013190)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=17013190"><b><span style="line-height:1.0;">ФОРМИРОВАНИЕ НЕСТАЦИОНАРНЫХ РЕЖИМОВ ПРИ МОДЕЛИРОВАНИИ АСПИРАЦИОННЫХ ТЕЧЕНИЙ: НЕУСТОЙЧИВОСТЬ КЕЛЬВИНА - ГЕЛЬМГОЛЬЦА</span></b></a><br><font color="#00008f"><i>Хоперсков А.В., Азаров В.Н., Хоперсков С.А., Коротков Е.А., Жумалиев А.Г.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33697336">Вестник Волгоградского государственного университета. Серия 1: Математика. Физика</a>. 
+2011. 
+<a href="https://elibrary.ru/contents.asp?id=33697336&amp;selid=17013190">№&nbsp;1&nbsp;(14)</a>.  С. 151-155.
+
+</font></td><td valign="middle" align="center">8</td></tr>
+
+
+<tr id="a42691519" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>73</b></font><br><input type="checkbox" name="tid42691519" id="tid42691519" onclick="if (this.checked) {RowSelect(a42691519,1)} else {RowSelect(a42691519,0)}"><div id="pdf_42691519" name="pdf_42691519"><a href="javascript:load_article(42691519)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=42691519"><b><span style="line-height:1.0;">ВЛИЯНИЕ ТРАНСПОРТНЫХ МАГИСТРАЛЕЙ НА ФОРМИРОВАНИЕ ШУМА В ГОРОДСКОЙ СРЕДЕ И СПОСОБЫ ЕГО СНИЖЕНИЯ</span></b></a><br><font color="#00008f"><i>Иванова Ю.П., Соловьева Т.В., Дериченко А.В., Боженкова А.С., Маркин В.С., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=42691498">Инженерный вестник Дона</a>. 
+2020. 
+<a href="https://elibrary.ru/contents.asp?id=42691498&amp;selid=42691519">№&nbsp;1&nbsp;(61)</a>.  С. 21.
+
+</font></td><td valign="middle" align="center">7</td></tr>
+
+
+<tr id="a26455377" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>74</b></font><br><input type="checkbox" name="tid26455377" id="tid26455377" onclick="if (this.checked) {RowSelect(a26455377,1)} else {RowSelect(a26455377,0)}"><div id="pdf_26455377" name="pdf_26455377"><a href="javascript:load_article(26455377)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=26455377"><b><span style="line-height:1.0;">МОДЕЛИРОВАНИЕ ОСНОВНЫХ БИЗНЕС-ПРОЦЕССОВ УПРАВЛЕНИЯ IT-СЕРВИСАМИ</span></b></a><br><font color="#00008f"><i>Бубненкова А.О., Власюк Е.А., Сплендер Л.В., Трандофиров Д.А., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34254485">Качество. Инновации. Образование</a>. 
+2016. 
+<a href="https://elibrary.ru/contents.asp?id=34254485&amp;selid=26455377">№&nbsp;5&nbsp;(132)</a>.  С. 47-61.
+
+</font></td><td valign="middle" align="center">7</td></tr>
+
+
+<tr id="a25809194" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>75</b></font><br><input type="checkbox" name="tid25809194" id="tid25809194" onclick="if (this.checked) {RowSelect(a25809194,1)} else {RowSelect(a25809194,0)}"><div id="pdf_25809194" name="pdf_25809194"><a href="javascript:load_article(25809194)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=25809194"><b><span style="line-height:1.0;">ЭКСПЕРИМЕНТАЛЬНЫЕ ИССЛЕДОВАНИЯ ПРОЦЕССОВ РАСПРОСТРАНЕНИЯ ПЫЛИ В ЗОНАХ СТРОИТЕЛЬНЫХ ОТВАЛОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Трохимчук М.В., Трохимчук К.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34229795">Известия высших учебных заведений. Геология и разведка</a>. 
+2016. 
+<a href="https://elibrary.ru/contents.asp?id=34229795&amp;selid=25809194">№&nbsp;1</a>.  С. 55-59.
+
+</font></td><td valign="middle" align="center">7</td></tr>
+
+
+<tr id="a21830056" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>76</b></font><br><input type="checkbox" name="tid21830056" id="tid21830056" onclick="if (this.checked) {RowSelect(a21830056,1)} else {RowSelect(a21830056,0)}"><div id="pdf_21830056" name="pdf_21830056"><a href="javascript:load_article(21830056)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=21830056"><b><span style="line-height:1.0;">ИЗЪЯТИЕ КИСЛОРОДА ИЗ БИОСФЕРЫ КАК ВНЕШНЕЕ НАПРАВЛЕНИЕ ДЕЯТЕЛЬНОСТИ ГОРОДА</span></b></a><br><font color="#00008f"><i>Ильичев В.А., Азаров В.Н., Донцова Т.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33976822">Биосферная совместимость: человек, регион, технологии</a>. 
+2013. 
+<a href="https://elibrary.ru/contents.asp?id=33976822&amp;selid=21830056">№&nbsp;1&nbsp;(1)</a>.  С. 20-29.
+
+</font></td><td valign="middle" align="center">7</td></tr>
+
+
+<tr id="a9558208" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>77</b></font><br><input type="checkbox" name="tid9558208" id="tid9558208" onclick="if (this.checked) {RowSelect(a9558208,1)} else {RowSelect(a9558208,0)}"><div id="pdf_9558208" name="pdf_9558208"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=9558208"><b><span style="line-height:1.0;">РАСПРОСТРАНЕНИЕ ПЫЛИ ПРИ ПРОИЗВОДСТВЕ АСФАЛЬТОБЕТОННЫХ СМЕСЕЙ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Богуславский Е.И., Учаев В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33188448">Строительные материалы</a>. 
+2002. 
+<a href="https://elibrary.ru/contents.asp?id=33188448&amp;selid=9558208">№&nbsp;8</a>.  С. 18.
+
+</font></td><td valign="middle" align="center">7</td></tr>
+
+
+<tr id="a37111230" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>78</b></font><br><input type="checkbox" name="tid37111230" id="tid37111230" onclick="if (this.checked) {RowSelect(a37111230,1)} else {RowSelect(a37111230,0)}"><div id="pdf_37111230" name="pdf_37111230"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=37111230"><b><span style="line-height:1.0;">OPTIMIZATION OF DESIGN PARAMETERS OF DUST COLLECTORS WITH COUNTER-CURRENT SWIRLING FLOWS IN THE SYSTEMS OF DEDUSTING VENTILATION</span></b></a><br><font color="#00008f"><i>Azarov V.N., Stefanenko I.V., Borovkov D.P., Ostaali M.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=37111229">International Review of Mechanical Engineering</a>. 
+2018. 
+Т. 12. <a href="https://elibrary.ru/contents.asp?id=37111229&amp;selid=37111230">№&nbsp;8</a>.  С. 721-725.
+
+</font></td><td valign="middle" align="center">6</td></tr>
+
+
+<tr id="a35604187" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>79</b></font><br><input type="checkbox" name="tid35604187" id="tid35604187" onclick="if (this.checked) {RowSelect(a35604187,1)} else {RowSelect(a35604187,0)}"><div id="pdf_35604187" name="pdf_35604187"><a href="javascript:load_article(35604187)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=35604187"><b><span style="line-height:1.0;">О ПРИМЕНЕНИИ ГОСТ Р 56929-2016 ПРИ МОНИТОРИНГЕ ПЫЛЕВОГО ЗАГРЯЗНЕНИЯ АТМОСФЕРНОГО ВОЗДУХА ГОРОДСКИХ ТЕРРИТОРИЙ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Козловцева Е.Ю., Азаров А.В., Добринский Д.Р., Милохова В.И., Стреляева А.Б., Тертишников И.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=35604172">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2018. 
+<a href="https://elibrary.ru/contents.asp?id=35604172&amp;selid=35604187">№&nbsp;53&nbsp;(72)</a>.  С. 132-140.
+
+</font></td><td valign="middle" align="center">6</td></tr>
+
+
+<tr id="a35146162" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>80</b></font><br><input type="checkbox" name="tid35146162" id="tid35146162" onclick="if (this.checked) {RowSelect(a35146162,1)} else {RowSelect(a35146162,0)}"><div id="pdf_35146162" name="pdf_35146162"><a href="javascript:load_article(35146162)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=35146162"><b><span style="line-height:1.0;">"СМЕНОВЕХОВСКОЕ" ДВИЖЕНИЕ И РЕАЛИИ СОВЕТСКОГО ОБЩЕСТВА 1920-Х ГОДОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=35146149">Научный диалог</a>. 
+2018. 
+<a href="https://elibrary.ru/contents.asp?id=35146149&amp;selid=35146162">№&nbsp;6</a>.  С. 114-123.
+
+</font></td><td valign="middle" align="center">6</td></tr>
+
+
+<tr id="a32321713" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>81</b></font><br><input type="checkbox" name="tid32321713" id="tid32321713" onclick="if (this.checked) {RowSelect(a32321713,1)} else {RowSelect(a32321713,0)}"><div id="pdf_32321713" name="pdf_32321713"><a href="javascript:load_article(32321713)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=32321713"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЕ РАСПРЕДЕЛЕНИЯ ЧАСТИЦ ПЫЛИ В ПОМЕЩЕНИИ ЗДАНИЯ ОБЩЕСТВЕННОГО НАЗНАЧЕНИЯ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Козловцева Е.Ю.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34828149">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2017. 
+<a href="https://elibrary.ru/contents.asp?id=34828149&amp;selid=32321713">№&nbsp;50&nbsp;(69)</a>.  С. 148-155.
+
+</font></td><td valign="middle" align="center">6</td></tr>
+
+
+<tr id="a26406145" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>82</b></font><br><input type="checkbox" name="tid26406145" id="tid26406145" onclick="if (this.checked) {RowSelect(a26406145,1)} else {RowSelect(a26406145,0)}"><div id="pdf_26406145" name="pdf_26406145"><a href="javascript:load_article(26406145)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=26406145"><b><span style="line-height:1.0;">ЭКСПЕРИМЕНТАЛЬНАЯ ОЦЕНКА ПЫЛЕВОГО ФАКТОРА НА ЦЕМЕНТНЫХ ЗАВОДАХ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Мензелинцева Н.В., Карапузова Н.Ю., Фомина Е.О., Пшеничкина Н.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34252957">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2016. 
+<a href="https://elibrary.ru/contents.asp?id=34252957&amp;selid=26406145">№&nbsp;44-2&nbsp;(63)</a>.  С. 145-156.
+
+</font></td><td valign="middle" align="center">6</td></tr>
+
+
+<tr id="a20458391" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>83</b></font><br><input type="checkbox" name="tid20458391" id="tid20458391" onclick="if (this.checked) {RowSelect(a20458391,1)} else {RowSelect(a20458391,0)}"><div id="pdf_20458391" name="pdf_20458391"><a href="javascript:load_article(20458391)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=20458391"><b><span style="line-height:1.0;">ПРИМЕНЕНИЕ СИСТЕМНО-ДИНАМИЧЕСКОГО МОДЕЛИРОВАНИЯ ДЛЯ ОЦЕНКИ ВОЗДЕЙСТВИЯ АВТОТРАНСПОРТА И ОЗЕЛЕНЕНИЯ НА КАЧЕСТВО ВОЗДУХА</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Садовникова Н.П., Мамонтов Д.П.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33859875">Строительство и реконструкция</a>. 
+2013. 
+<a href="https://elibrary.ru/contents.asp?id=33859875&amp;selid=20458391">№&nbsp;3&nbsp;(47)</a>.  С. 23-27.
+
+</font></td><td valign="middle" align="center">6</td></tr>
+
+
+<tr id="a18854378" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>84</b></font><br><input type="checkbox" name="tid18854378" id="tid18854378" onclick="if (this.checked) {RowSelect(a18854378,1)} else {RowSelect(a18854378,0)}"><div id="pdf_18854378" name="pdf_18854378"><a href="javascript:load_article(18854378)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=18854378"><b><span style="line-height:1.0;">ИСПОЛЬЗОВАНИЕ
+ СВОДНЫХ РАСЧЕТОВ УРОВНЕЙ ЗАГРЯЗНЕНИЯ АТМОСФЕРЫ ПРИ ВЫБОРЕ 
+ГРАДОСТРОИТЕЛЬНЫХ РЕШЕНИЙ В РАМКАХ ОПТИМИЗАЦИИ ГОРОДСКОЙ ТРАНСПОРТНОЙ 
+СХЕМЫ</span></b></a><br><font color="#00008f"><i>Недре А.Ю., Азаров В.Н., Недре Ю.А.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33821015">Интернет-вестник ВолгГАСУ</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=33821015&amp;selid=18854378">№&nbsp;2&nbsp;(22)</a>.  С. 18.
+
+</font></td><td valign="middle" align="center">6</td></tr>
+
+
+<tr id="a18854372" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>85</b></font><br><input type="checkbox" name="tid18854372" id="tid18854372" onclick="if (this.checked) {RowSelect(a18854372,1)} else {RowSelect(a18854372,0)}"><div id="pdf_18854372" name="pdf_18854372"><a href="javascript:load_article(18854372)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=18854372"><b><span style="line-height:1.0;">ИСПОЛЬЗОВАНИЕ ЭНЕРГИИ ЗАКРУТКИ ПОТОКА ДЛЯ СНИЖЕНИЯ АЭРОДИНАМИЧЕСКОГО СОПРОТИВЛЕНИЯ ПЫЛЕУЛОВИТЕЛЕЙ НА ВСТРЕЧНЫХ ЗАКРЫТЫХ ПОТОКАХ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Боровков Д.П., Филиппова С.В.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33821015">Интернет-вестник ВолгГАСУ</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=33821015&amp;selid=18854372">№&nbsp;2&nbsp;(22)</a>.  С. 12.
+
+</font></td><td valign="middle" align="center">6</td></tr>
+
+
+<tr id="a17797599" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>86</b></font><br><input type="checkbox" name="tid17797599" id="tid17797599" onclick="if (this.checked) {RowSelect(a17797599,1)} else {RowSelect(a17797599,0)}"><div id="pdf_17797599" name="pdf_17797599"><a href="javascript:load_article(17797599)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=17797599"><b><span style="line-height:1.0;">ПОВЫШЕНИЕ УСТОЙЧИВОСТИ РАБОТЫ СИСТЕМЫ АСПИРАЦИИ С ИСПОЛЬЗОВАНИЕМ ЗАКРУТКИ ПОТОКА</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Боровков Д.П.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33738406">Строительство и реконструкция</a>. 
+2012. 
+<a href="https://elibrary.ru/contents.asp?id=33738406&amp;selid=17797599">№&nbsp;2&nbsp;(40)</a>.  С. 69-73.
+
+</font></td><td valign="middle" align="center">6</td></tr>
+
+
+<tr id="a44701069" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>87</b></font><br><input type="checkbox" name="tid44701069" id="tid44701069" onclick="if (this.checked) {RowSelect(a44701069,1)} else {RowSelect(a44701069,0)}"><div id="pdf_44701069" name="pdf_44701069"><a href="javascript:order_item(44701069, 200)"><img src="1_files/download_yellow.png" title="Можно приобрести полный текст этой публикации за 200 руб." width="16" vspace="3" border="0"></a></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=44701069"><b><span style="line-height:1.0;">ИТ-ИНФРАСТРУКТУРЫ ЦИФРОВОГО ПРЕДПРИЯТИЯ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Леохин Ю.Л.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=44701050">Качество. Инновации. Образование</a>. 
+2020. 
+<a href="https://elibrary.ru/contents.asp?id=44701050&amp;selid=44701069">№&nbsp;6&nbsp;(170)</a>.  С. 105-117.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a44694120" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>88</b></font><br><input type="checkbox" name="tid44694120" id="tid44694120" onclick="if (this.checked) {RowSelect(a44694120,1)} else {RowSelect(a44694120,0)}"><div id="pdf_44694120" name="pdf_44694120"><a href="javascript:load_article(44694120)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=44694120"><b><span style="line-height:1.0;">ВЛИЯНИЕ
+ МЕТЕОРОЛОГИЧЕСКИХ УСЛОВИЙ НА РАСПРОСТРАНЕНИЕ ЗАГРЯЗНЯЮЩИХ ВЕЩЕСТВ В 
+АТМОСФЕРНОМ ВОЗДУХЕ ПРИМАГИСТРАЛЬНЫХ ТЕРРИТОРИЙ ГОРОДОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Иванова Ю.П., Соловьева Т.В., Сахарова А.А., Иванова О.О.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=44694090">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2020. 
+<a href="https://elibrary.ru/contents.asp?id=44694090&amp;selid=44694120">№&nbsp;4&nbsp;(81)</a>.  С. 311-316.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a44021804" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>89</b></font><br><input type="checkbox" name="tid44021804" id="tid44021804" onclick="if (this.checked) {RowSelect(a44021804,1)} else {RowSelect(a44021804,0)}"><div id="pdf_44021804" name="pdf_44021804"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=44021804"><b><span style="line-height:1.0;">FINE DUST CONCENTRATION РМ10 IN THE ATMOSPHERE OF THE CITY OF KABUL, AFGHANISTAN, IN SPRING MONTHS</span></b></a><br><font color="#00008f"><i>Stefanenko I.V., Solovieva T.V., Nasimi M.H., Azarov V.N.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34841855">Applied Mechanics and Materials</a>. 
+2018. 
+Т. 878.  С. 255-258.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a42665447" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>90</b></font><br><input type="checkbox" name="tid42665447" id="tid42665447" onclick="if (this.checked) {RowSelect(a42665447,1)} else {RowSelect(a42665447,0)}"><div id="pdf_42665447" name="pdf_42665447"><a href="javascript:load_article(42665447)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=42665447"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЕ ДИСПЕРСНОГО СОСТАВА ПЫЛИ ГОРОДСКОЙ СРЕДЫ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Кузьмичев А.А., Николенко Д.А., Васильев А.Н., Козловцева Е.Ю.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=42665437">Вестник МГСУ</a>. 
+2020. 
+Т. 15. <a href="https://elibrary.ru/contents.asp?id=42665437&amp;selid=42665447">№&nbsp;3</a>.  С. 432-442.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a38532162" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>91</b></font><br><input type="checkbox" name="tid38532162" id="tid38532162" onclick="if (this.checked) {RowSelect(a38532162,1)} else {RowSelect(a38532162,0)}"><div id="pdf_38532162" name="pdf_38532162"><a href="javascript:order_item(38532162, 167)"><img src="1_files/download_yellow.png" title="Можно приобрести полный текст этой публикации за 167 руб." width="16" vspace="3" border="0"></a></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=38532162"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЕ АЭРОДИНАМИЧЕСКИХ И ФИЗИКО-ХИМИЧЕСКИХ ХАРАКТЕРИСТИК ПЫЛИ ОПОКИ, ПРИМЕНЯЕМЫХ В СТРОИТЕЛЬСТВЕ</span></b></a><br><font color="#00008f"><i>Сахарова А.А., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=38532151">Строительство и реконструкция</a>. 
+2019. 
+<a href="https://elibrary.ru/contents.asp?id=38532151&amp;selid=38532162">№&nbsp;2&nbsp;(82)</a>.  С. 106-115.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a32610854" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>92</b></font><br><input type="checkbox" name="tid32610854" id="tid32610854" onclick="if (this.checked) {RowSelect(a32610854,1)} else {RowSelect(a32610854,0)}"><div id="pdf_32610854" name="pdf_32610854"><a href="javascript:load_article(32610854)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=32610854"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЕ РАСПРЕДЕЛЕНИЯ ЧАСТИЦ ПЫЛИ В ПОМЕЩЕНИИ ЗДАНИЯ ОБЩЕСТВЕННОГО НАЗНАЧЕНИЯ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Козловцева Е.Ю.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34836697">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2018. 
+<a href="https://elibrary.ru/contents.asp?id=34836697&amp;selid=32610854">№&nbsp;51&nbsp;(70)</a>.  С. 170-177.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a32321745" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>93</b></font><br><input type="checkbox" name="tid32321745" id="tid32321745" onclick="if (this.checked) {RowSelect(a32321745,1)} else {RowSelect(a32321745,0)}"><div id="pdf_32321745" name="pdf_32321745"><a href="javascript:load_article(32321745)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=32321745"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЕ ЗАКОНОМЕРНОСТЕЙ ЗАГРЯЗНЕНИЯ СТРОИТЕЛЬНЫХ КОНСТРУКЦИЙ С ПОМОЩЬЮ МЕТОДОВ КОМПЬЮТЕРНОГО МОДЕЛИРОВАНИЯ</span></b></a><br><font color="#00008f"><i>Кузьмичев А.А., Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34828149">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2017. 
+<a href="https://elibrary.ru/contents.asp?id=34828149&amp;selid=32321745">№&nbsp;50&nbsp;(69)</a>.  С. 440-450.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a30775226" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>94</b></font><br><input type="checkbox" name="tid30775226" id="tid30775226" onclick="if (this.checked) {RowSelect(a30775226,1)} else {RowSelect(a30775226,0)}"><div id="pdf_30775226" name="pdf_30775226"><a href="javascript:order_item(30775226, 200)"><img src="1_files/download_yellow.png" title="Можно приобрести полный текст этой публикации за 200 руб." width="16" vspace="3" border="0"></a></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=30775226"><b><span style="line-height:1.0;">ВЫЗОВЫ ЭПОХИ ЦИФРОВОЙ РЕВОЛЮЦИИ. НОВЫЕ КОМПЕТЕНЦИИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Бойцов Б.В., Гудков Ю.И., Майборода В.П.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34552843">Компетентность</a>. 
+2017. 
+<a href="https://elibrary.ru/contents.asp?id=34552843&amp;selid=30775226">№&nbsp;9-10&nbsp;(150-151)</a>.  С. 46-57.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a27220914" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>95</b></font><br><input type="checkbox" name="tid27220914" id="tid27220914" onclick="if (this.checked) {RowSelect(a27220914,1)} else {RowSelect(a27220914,0)}"><div id="pdf_27220914" name="pdf_27220914"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=27220914"><b><span style="line-height:1.0;">СОВЕРШЕНСТВОВАНИЕ МЕТОДОВ РАСЧЕТА РАССЕИВАНИЯ ПЫЛЕВЫХ ВЫБРОСОВ НА ПРЕДПРИЯТИЯХ СТРОЙИНДУСТРИИ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Мензелинцева Н.В., Кабаева И.В., Шестаков А.Г.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34329588">Энергоэффективность Волгоградской области</a>. 
+2006. 
+<a href="https://elibrary.ru/contents.asp?id=34329588&amp;selid=27220914">№&nbsp;6</a>.  С. 45-51.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a23563244" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>96</b></font><br><input type="checkbox" name="tid23563244" id="tid23563244" onclick="if (this.checked) {RowSelect(a23563244,1)} else {RowSelect(a23563244,0)}"><div id="pdf_23563244" name="pdf_23563244"><a href="javascript:load_article(23563244)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=23563244"><b><span style="line-height:1.0;">РАСЧЕТ ВЕНТИЛЯЦИОННЫХ ВЫБРОСОВ ЦЕМЕНТНЫХ ЗАВОДОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Мензелинцева Н.В., Карапузова Н.Ю., Фомина Е.О., Редван А.М.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34074979">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2015. 
+<a href="https://elibrary.ru/contents.asp?id=34074979&amp;selid=23563244">№&nbsp;40&nbsp;(59)</a>.  С. 4-17.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a23015736" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>97</b></font><br><input type="checkbox" name="tid23015736" id="tid23015736" onclick="if (this.checked) {RowSelect(a23015736,1)} else {RowSelect(a23015736,0)}"><div id="pdf_23015736" name="pdf_23015736"></div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=23015736"><b><span style="line-height:1.0;">ВИРТУАЛЬНЫЕ ПРАКТИКУМЫ КАК ОСНОВНОЕ ЗВЕНО НЕПРЕРЫВНОГО ОБРАЗОВАНИЯ В ОБЛАСТИ ИНФОРМАЦИОННО-КОММУНИКАЦИОННЫХ ТЕХНОЛОГИЙ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Фомин С.С.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=34054208">Вестник Рязанского государственного радиотехнического университета</a>. 
+2014. 
+<a href="https://elibrary.ru/contents.asp?id=34054208&amp;selid=23015736">№&nbsp;50-2</a>.  С. 83-88.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a21695208" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>98</b></font><br><input type="checkbox" name="tid21695208" id="tid21695208" onclick="if (this.checked) {RowSelect(a21695208,1)} else {RowSelect(a21695208,0)}"><div id="pdf_21695208" name="pdf_21695208"><a href="javascript:load_article(21695208)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=21695208"><b><span style="line-height:1.0;">ЕВРОПА В 1871-1900 ГГ.: ПОЛИТИЧЕСКОЕ РАВНОВЕСИЕ ИЛИ ПОДГОТОВКА К ВОЙНЕ?</span></b></a><br><font color="#00008f"><i>Азаров В.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33969277">Научный диалог</a>. 
+2014. 
+<a href="https://elibrary.ru/contents.asp?id=33969277&amp;selid=21695208">№&nbsp;5&nbsp;(29)</a>.  С. 90-99.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a18000295" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>99</b></font><br><input type="checkbox" name="tid18000295" id="tid18000295" onclick="if (this.checked) {RowSelect(a18000295,1)} else {RowSelect(a18000295,0)}"><div id="pdf_18000295" name="pdf_18000295"><a href="javascript:load_article(18000295)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=18000295"><b><span style="line-height:1.0;">О НЕКОТОРЫХ МЕРАХ ПО СНИЖЕНИЮ ВЫБРОСОВ В АТМОСФЕРНЫЙ ВОЗДУХ ТВЕРДЫХ ЧАСТИЦ (РМ <sub>10</sub> И РМ <sub>2,5</sub>) НА ОСНОВЕ ОПЫТА НИДЕРЛАНДОВ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Горшков Е.В., Недре А.Ю., Воробьёв В.И.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33753232">Вестник Волгоградского государственного архитектурно-строительного университета. Серия: Строительство и архитектура</a>. 
+2011. 
+<a href="https://elibrary.ru/contents.asp?id=33753232&amp;selid=18000295">№&nbsp;25&nbsp;(44)</a>.  С. 407-410.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+<tr id="a17233344" valign="middle" bgcolor="#f5f5f5">
+<td valign="top" align="center"><font color="#00008f"><b>100</b></font><br><input type="checkbox" name="tid17233344" id="tid17233344" onclick="if (this.checked) {RowSelect(a17233344,1)} else {RowSelect(a17233344,0)}"><div id="pdf_17233344" name="pdf_17233344"><a href="javascript:load_article(17233344)"><img src="1_files/download_green.png" title="Доступ к полному тексту открыт" width="16" vspace="3" border="0"></a>
+
+</div></td>
+<td valign="top" align="left">
+
+<a href="https://elibrary.ru/item.asp?id=17233344"><b><span style="line-height:1.0;">СИСТЕМА АТТЕСТАЦИИ И РЕГИСТРАЦИИ СПЕЦИАЛИСТОВ В ОБЛАСТИ ИНФОРМАЦИОННО-КОММУНИКАЦИОННЫХ ТЕХНОЛОГИЙ</span></b></a><br><font color="#00008f"><i>Азаров В.Н., Тихонов А.Н.</i></font><br>
+<font color="#00008f">
+<a href="https://elibrary.ru/contents.asp?id=33723635">Качество. Инновации. Образование</a>. 
+2011. 
+<a href="https://elibrary.ru/contents.asp?id=33723635&amp;selid=17233344">№&nbsp;11&nbsp;(78)</a>.  С. 10-18.
+
+</font></td><td valign="middle" align="center">5</td></tr>
+
+
+</tbody></table>
+
+
+<table width="580" cellspacing="1" cellpadding="3" border="0" bgcolor="#ffffff">
+<tbody><tr class="menus" valign="middle" align="center">
+<td width="15%" nowrap="nowrap" bgcolor="#555555"><a href="https://elibrary.ru/query_results.asp?pagenum=1">В&nbsp;начало</a></td>
+<td width="10%" nowrap="nowrap" bgcolor="#555555"><font color="#aaaaaa">&lt;&lt;</font></td>
+
+<td width="5%" nowrap="nowrap" bgcolor="#5c6aa6"><font color="#ffffff">1</font></td>
+
+<td width="5%" nowrap="nowrap" bgcolor="#555555"><a href="https://elibrary.ru/query_results.asp?pagenum=2">2</a></td>
+
+<td width="5%" nowrap="nowrap" bgcolor="#555555"><a href="https://elibrary.ru/query_results.asp?pagenum=3">3</a></td>
+
+<td width="35%" nowrap="nowrap" bgcolor="#555555"></td>
+
+<td width="10%" nowrap="nowrap" bgcolor="#555555"><a href="https://elibrary.ru/query_results.asp?pagenum=2">&gt;&gt;</a></td>
+<td width="15%" nowrap="nowrap" bgcolor="#555555"><a href="https://elibrary.ru/query_results.asp?pagenum=3">В&nbsp;конец</a></td>
+</tr></tbody></table>
+
+</td></tr></tbody></table>
+
+
+</td>
+<td width="10">&nbsp;</td>
+<td width="200" valign="top" align="right">
+
+<img src="1_files/1pix.gif" vspace="14"><br>
+<table width="200" cellspacing="0" cellpadding="3" border="0" bgcolor="#eeeeee">
+<tbody><tr><td colspan="2" valign="middle" bgcolor="#555555" align="center">
+<font color="#ffffff">Возможные действия</font>
+</td></tr>
+
+<tr><td colspan="2"><img src="1_files/1pix.gif" vspace="5"><br></td></tr>
+
+
+<tr><td width="15%" valign="top" align="right">
+<a href="https://elibrary.ru/query_results.asp?pagenum=2"><img src="1_files/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="https://elibrary.ru/query_results.asp?pagenum=2">Следующая страница</a>
+</td></tr>
+<tr><td colspan="2"><img src="1_files/1pix.gif" vspace="5"><br></td></tr>
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:select_all()"><img src="1_files/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:select_all()">Выделить все публикации на этой странице</a>
+</td></tr>
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:deselect_all()"><img src="1_files/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:deselect_all()">Снять выделение</a>
+</td></tr>
+
+<tr><td colspan="2"><img src="1_files/1pix.gif" vspace="5"><br></td></tr>
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:itembox_add()"><img src="1_files/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:itembox_add()">Добавить выделенные статьи в подборку:</a></td></tr>
+
+<tr><td colspan="2" align="center"><select name="itemboxid" style="width:190px" class="input">
+
+<option value="0" selected="selected">Новая подборка
+</option></select>&nbsp;</td></tr>
+
+<tr><td width="15%" valign="top" align="right">
+<a href="javascript:itembox_add_all()"><img src="1_files/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="javascript:itembox_add_all()">Добавить все страницы с результатами поиска в указанную выше подборку</a></td></tr>
+
+<tr><td colspan="2"><img src="1_files/1pix.gif" vspace="5"><br></td></tr>
+<tr><td width="15%" valign="top" align="right">
+<a href="https://elibrary.ru/querybox.asp?scope=current"><img src="1_files/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="https://elibrary.ru/querybox.asp?scope=current">Вернуться к поисковой форме и изменить условия запроса</a></td></tr>
+
+<tr><td width="15%" valign="top" align="right">
+<a href="https://elibrary.ru/querybox.asp?scope=newquery"><img src="1_files/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="https://elibrary.ru/querybox.asp?scope=newquery">Создать новый поисковый запрос</a></td></tr>
+
+<tr><td width="15%" valign="top" align="right">
+<a href="https://elibrary.ru/querybox.asp?scope=infound"><img src="1_files/but_orange.gif" width="15" hspace="3" height="15" border="0"></a></td>
+<td width="85%" valign="middle" align="left"><a href="https://elibrary.ru/querybox.asp?scope=infound">Продолжить поиск среди найденных результатов</a></td></tr>
+
+
+
+
+<tr><td colspan="2"><img src="1_files/1pix.gif" vspace="8"><br></td></tr>
+</tbody></table><br><br>
+
+
+
+<img src="1_files/1pix.gif" vspace="9"><br>
+
+
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+
+<br><br>
+</div>
+
+</body></html>
