@@ -5,29 +5,25 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
 
-# Лист, содержащий значения количества цитат для каждой из 255 статей
+N = 8 # Число файлов исходных данных
+
+# Лист, содержащий значения количества цитат для каждой из статей
 citations = []
 
-# Cчитывание данных из 3 файлов:
-for i in range(1, 4, 1):
+# Cчитывание данных из файлов:
+for i in range(1, N, 1):
 
     # Открытие очередного файла исходных данных и считывание его содержимого:
-    with open(str(i) + ".htm", "r", encoding="UTF8") as f:
+    with open(str(i) + ".html", "r", encoding="UTF8") as f:
 
         # Получаем объект в виде "супа", содержащий страницу
         soup = BeautifulSoup(f.read(), 'lxml')
 
-        # Для первых двух файлов:
-        if i < 3:
+        # Выделяем из "супа" нужные нам элементы
+        elements = list(map(lambda x: int(x.text),
+            soup.find_all(name="td", attrs={"valign": "middle", "align": "center"})[8:]))
 
-            # Выделяем из "супа" 100 нужных нам элементов
-            elements = list(map(lambda x: int(x.text),
-            soup.find_all(name="td", attrs={"valign": "middle", "align": "center"})[2:102]))
-
-        # Для третьего файла:
-        else:
-            elements = list(map(lambda x: int(x.text),
-                                soup.find_all(name="td", attrs={"valign": "middle", "align": "center"})[2:57]))
+        print(elements)
 
         # Добавим в общий список данные из этого файла:
         citations += elements
